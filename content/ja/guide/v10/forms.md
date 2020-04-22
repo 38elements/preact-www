@@ -1,13 +1,13 @@
 ---
-name: Forms
-description: 'How to build awesome forms in Preact that work anywhere.'
+name: フォーム
+description: 'Preactでどこでも動作する素晴らしいフォームを作成する方法'
 ---
 
-# Forms
+# フォーム
 
-Forms in Preact work much the same as they do in HTML. You render a control, and attach an event listener to it.
+PreactのフォームとHTMLのフォームは、ほとんど同じように動作します。両方ともコントロールをレンダリングしイベントリスナをセットします。
 
-The main difference is that in most cases the `value` is not controlled by the DOM node, but by Preact.
+両者の主な違いは、ほとんどの場合で`value`の管理をDOMノードもしくはコンポーネントのどちらが行うかです。
 
 ---
 
@@ -15,27 +15,39 @@ The main difference is that in most cases the `value` is not controlled by the D
 
 ---
 
-## Controlled & Uncontrolled Components
+## ControlledコンポーネントとUncontrolledコンポーネント
 
-When talking about form controls you'll often encounter the words "Controlled Component" and "Uncontrolled Component". The description refers to the way data flow is handled. The DOM has a bidirectional data flow, because every form control will manage the user input themselves. A simple text input will always update it's value when a user typed into it.
+フォームコントロールについての文章で"Controlled"コンポーネントと"Uncontrolled"コンポーネントという単語をよく見ます。<br>
+ "Controlled"と"Uncontrolled"はデータフローの扱い方を表しています。<br>
+すべてのフォームコントロールはユーザの入力を自身で管理するためにDOMは双方向のデータフローを採用しています。<br>
+例として、ユーザがテキスト`input`要素にタイプすると、その値は必ず反映されます。
 
-A framework like Preact in contrast generally has a unidirectional data flow. The component doesn't manage the value itself there, but something else higher up in the component tree.
+それとは対象的にPreactのようなフレームワークは一般的に単方向のデータフローを採用しています。<br>
+Preactでは、ほとんどの場合、DOM(例えばinputテキスト要素)は値を管理しません、コンポーネント(例えばinputテキスト要素を持つコンポーネント)が管理します。
+
+Controlledコンポーネントはコンポーネントが入力コントロールの値を管理することです。<br>
+UnControlledコンポーネントはコンポーネントが入力コントロールの値を管理しないことです。
 
 ```jsx
-// Uncontrolled, because Preact doesn't set the value
-<input onInput={myEventHandler} />;
-
-// Controlled, because Preact manages the input's value now
+// これはControlledコンポーネントです。Preactは入力されたデータを管理します。
 <input value={someValue} onInput={myEventHandler} />;
+
+// これはUncontrolledコンポーネントです。Preactはvalueに値をセットしません。DOMが値を管理します。
+<input onInput={myEventHandler} />;
 ```
 
-Generally, you should try to use _Controlled_ Components at all times.  However, when building standalone Components or wrapping third-party UI libraries, it can still be useful to simply use your component as a mount point for non-preact functionality. In these cases, "Uncontrolled" Components are nicely suited to the task.
+一般的に常にControlledコンポーネントを使うべきです。<br>
+しかし、UncontrolledコンポーネントはスタンドアロンなコンポーネントやサードパーティのUIライブラリをラップする場合に使用すると便利です。
 
-> One gotcha to note here is that setting the value to `undefined` or `null` will essentially become uncontrolled.
+> value属性の値を`undefined`もしくは`null`にセットすると`Uncontrolled`になることに注意してください。
 
-## Creating A Simple Form
+## 簡単なフォームの作成
 
-Let's create a simple form to submit todo items. For this we create a `<form>`-Element and bind an event handler that is called whenever the form is submitted. We do a similar thing for the text input field, but note that we are storing the value in our class ourselves. You guessed it, we're using a _controlled_ input here. In this example it's very useful, because we need to display the input's value in another element.
+ToDoを送信する簡単なフォームを作成しましょう。<br>
+`<form>`要素を作成します。そして、`<form>`要素のonSubmitにイベントハンドラをセットします。<br>
+テキストinputフィールドにも同様のことをしますが、値を`setState()`を使ってTodoFormコンポーネントに保存していることに注目してください。<br>
+お察しの通り、ここではControlledコンポーネントを使っています。<br>
+この例では、入力した値を別の要素に表示する必要が有るので、Controlledコンポーネントが適しています。
 
 ```jsx
 class TodoForm extends Component {
@@ -63,9 +75,9 @@ class TodoForm extends Component {
 }
 ```
 
-## Select Input
+## Select要素
 
-A `<select>`-Element is a little more involved, but works similar to all other form controls:
+`<select>`要素はもう少し複雑ですが、他のフォームコントロールと同じように動作します。
 
 ```jsx
 class MySelect extends Component {
@@ -95,19 +107,45 @@ class MySelect extends Component {
 }
 ```
 
-## Checkboxes & Radio Buttons
+## CheckboxとRadioボタン
 
-Checkboxes and radio buttons (`<input type="checkbox|radio">`) can initially cause confusion when building controlled forms. This is because in an uncontrolled environment, we would typically allow the browser to "toggle" or "check" a checkbox or radio button for us, listening for a change event and reacting to the new value.  However, this technique does not transition well into a world view where the UI is always updated automatically in response to state and prop changes.
+HTMLではブラウザがcheckboxやradioボタンをトグルやチェックします。<br>
+Controlled Componentではトグルやチェックを実装する必要があります。<br>
+だから、最初にControlled ComponentでFormを作成する際は混乱するかもしれません。
 
-> **Walk-Through:** Say we listen for a "change" event on a checkbox, which is fired when the checkbox is checked or unchecked by the user.  In our change event handler, we set a value in `state` to the new value received from the checkbox.  Doing so will trigger a re-render of our component, which will re-assign the value of the checkbox to the value from state.  This is unnecessary, because we just asked the DOM for a value but then told it to render again with whatever value we wanted.
-
-So, instead of listening for a `input` event we should listen for a `click` event, which is fired any time the user clicks on the checkbox _or an associated `<label>`_.  Checkboxes just toggle between Boolean `true` and `false`, so clicking the checkbox or the label, we'll just invert whatever value we have in state, triggering a re-render, setting the checkbox's displayed value to the one we want.
-
-### Checkbox Example
+Controlledコンポーネントでcheckboxをチェックしたりチェックを外したりした際に発火する"change"イベントを監視しているとしましょう。<br>
+changeイベントハンドラではcheckboxから受け取ったEventオブジェクトにあるcheckedの値をコンポーネントの`state`にセットします。<br>
+これによって、コンポーネントの再レンダリングが発動します。その中で先程`state`にセットされたcheckedの値をcheckboxに反映します。
 
 ```jsx
 class MyForm extends Component {
-  toggle = e => {
+  toggle = event => {
+      let checked = event.target.checked;
+      this.setState({ checked });
+  };
+
+  render(_, { checked }) {
+    return (
+      <label>
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={this.toggle}
+        />
+      </label>
+    );
+  }
+}
+```
+
+しかし、Eventオブジェクトにあるcheckedの値を使用する必要はありません。なぜなら、コンポーネントはcheckboxにcheckedの値を提供しているので変更前のcheckedの値を持っているからです<br>
+だから、`change`イベントではなく`click`イベントを監視します。`click`イベントはチェックボックスや_それに関連した`<label>`_をクリックするたび発火します。<br>
+checkboxはBooleanである`true`と`false`を切り替えるだけです。checkboxやlabelをクリックするとstateにあるcheckedに該当する値を反転して意図した値にします。<br>
+すると再レンダリングが発動しcheckboxに反映されます。
+
+```jsx
+class MyForm extends Component {
+  toggle = () => {
       let checked = !this.state.checked;
       this.setState({ checked });
   };

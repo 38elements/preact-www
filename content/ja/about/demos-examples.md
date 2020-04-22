@@ -1,15 +1,15 @@
 ---
-name: Demos & Examples
+name: デモと例
 permalink: '/about/demos-examples'
-description: 'Collection of demos and example Preact applications'
+description: 'Preactアプリケーションのデモと例'
 ---
 
-# Demos & Examples
+# デモと例
 
-This pages lists a bunch of demos and examples you can use to learn Preact.
+このページはPreactの学習に使用できるデモと例をリストしています。
 
-> :information_desk_person: _Built one of your own?
-> [Add it!](https://github.com/preactjs/preact-www/blob/master/content/en/about/demos-examples.md)_
+> :information_desk_person: _あなたも何か作りましたか?
+> [それなら、加えましょう!](https://github.com/preactjs/preact-www/blob/master/content/en/about/demos-examples.md)_
 
 
 ## Full Apps

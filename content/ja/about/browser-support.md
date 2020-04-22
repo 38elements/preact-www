@@ -1,12 +1,13 @@
 ---
-name: Browser Support
+name: ブラウザのサポート
 permalink: '/about/browser-support'
-description: "Preact supports all modern browsers (Chrome, Firefox, Safari, Edge) and IE11 out of the box."
+description: "Preactはそのままですべてのモダンブラウザ(Chrome, Firefox, Safari, Edge)とIE11をサポートします。"
 ---
 
-# Browser Support
+# ブラウザのサポート
 
-Preact supports modern browsers (Chrome, Firefox, Safari, Edge) and IE11+. It works out of the box with these browsers and no additional polyfills are needed.
+Preactはモダンブラウザ(Chrome, Firefox, Safari, Edge)とIE11をサポートします。<br>
+polyfillを追加することなくそのままで動作します。
 
 <center>
     <a href="https://saucelabs.com/u/preact">

@@ -1,13 +1,15 @@
 ---
-name: Components
-descriptions: 'Components are the heart of any Preact application. Learn how to create them and use them to compose UIs together'
+name: コンポーネント
+descriptions: 'コンポーネントはPreactアプリケーションの心臓部です。コンポーネントを作成して、それらを連携してUIを構成する方法を学びましょう。'
 ---
 
-# Components
+# コンポーネント
 
-Components represent the basic building block in Preact. They are fundamental in making it easy to build complex UIs from little building blocks. They're also responsible for attaching state to our rendered output.
+コンポーネントはPreactの基本的な構成要素です。
+コンポーネントは小さな構成要素から複雑なUIを作る際に中心的な役割を果たします。
+コンポーネントはレンダリングされたアウトプットに対してステートを付与する役割があります。
 
-There are two kinds of components in Preact, which we'll talk about in this guide.
+Preactには2種類のコンポーネントがあります。このガイドではそれについて説明します。
 
 ---
 
@@ -15,9 +17,10 @@ There are two kinds of components in Preact, which we'll talk about in this guid
 
 ---
 
-## Functional Components
+## 関数コンポーネント
 
-Functional components are plain functions that receive `props` as the first argument. The function name **must** start with an uppercase letter in order for them to work in JSX.
+関数コンポーネントは第1引数に`props`を取る単純な関数です。<br>
+JSXで動作するために関数名は**大文字から始める必要があります**。
 
 ```jsx
 function MyComponent(props) {
@@ -31,13 +34,14 @@ const App = <MyComponent name="John Doe" />;
 render(App, document.body);
 ```
 
-> Note in earlier versions they were known as `"Stateless Components"`. This doesn't hold true anymore with the [hooks-addon](/guide/v10/hooks).
+> 注意 以前のバージョンでは「ステートレスコンポーネント」として知られていました。現在は[hooks-addon](/guide/v10/hooks)でステートを持つことができます。
 
-## Class Components
+## クラスコンポーネント
 
-Class components can have state and lifecycle methods. The latter are special methods, that will be called when a component is attached to the DOM or destroyed for example.
+クラスコンポーネントはステートとライフサイクルメソッドを持つことができます。<br>
+ライフサイクルメソッドは特別なメソッドです。例えば、コンポーネントがDOMにマウントされた時や削除された時に実行されます。
 
-Here we have a simple class component called `<Clock>` that displays the current time:
+ここに`<Clock>`というシンプルな現在の時刻を表示するクラスコンポーネントがあります。
 
 ```jsx
 class Clock extends Component {
@@ -68,29 +72,33 @@ class Clock extends Component {
 }
 ```
 
-### Lifecycle Methods
+### ライフサイクルメソッド
 
-In order to have the clock's time update every second, we need to know when `<Clock>` gets mounted to the DOM. _If you've used HTML5 Custom Elements, this is similar to the `attachedCallback` and `detachedCallback` lifecycle methods._ Preact invokes the following lifecycle methods if they are defined for a Component:
+現在の時計の時刻を1秒ごとに更新するためにいつ`<Clock>`がDOMにマウントされるかを知る必要があります。<br>
+_それはHTML5 Custom Elementsのライフサイクルメソッドである`attachedCallback`と`detachedCallback`に似ています。_<br>
+Preactはコンポーネントに以下のライフサイクルメソッドが定義されている場合、それを実行します。
 
-| Lifecycle method            | When it gets called                              |
+| ライフサイクルメソッド            | 実行されるタイミング                              |
 |-----------------------------|--------------------------------------------------|
-| `componentWillMount`        | (deprecated) before the component gets mounted to the DOM     |
-| `componentDidMount`         | after the component gets mounted to the DOM      |
-| `componentWillUnmount`      | prior to removal from the DOM                    |
-| `componentWillReceiveProps` | (deprecated) before new props get accepted                    |
-| `getDerivedStateFromProps` | just before `shouldComponentUpdate`. Use with care. |
-| `shouldComponentUpdate`     | before `render()`. Return `false` to skip render |
-| `componentWillUpdate`       | (deprecated) before `render()`                                |
-| `getSnapshotBeforeUpdate` | called just before `render()` |
-| `componentDidUpdate`        | after `render()`                                 |
+| `componentWillMount`        | (非推奨) コンポーネントがDOMにマウントされる前     |
+| `componentDidMount`         | コンポーネントがDOMにマウントされた後      |
+| `componentWillUnmount`      | DOMから削除される前                    |
+| `componentWillReceiveProps` | (非推奨) 新しいpropsを受け取る前                    |
+| `getDerivedStateFromProps` | `shouldComponentUpdate`の直前。注意して使って下さい。 |
+| `shouldComponentUpdate`     | `render()`の前。`false`を返したらrenderをスキップする。 |
+| `componentWillUpdate`       | (非推奨) `render()`の前。                                |
+| `getSnapshotBeforeUpdate` | `render()`が実行される直前 |
+| `componentDidUpdate`        | `render()`の後                                 |
 
-> See [this diagram](https://twitter.com/dan_abramov/status/981712092611989509) to get a visual overview of how they relate to each other.
+> [この図](https://twitter.com/dan_abramov/status/981712092611989509)を見てこれらが互いにどのように関係しているのか確認しましょう。
 
 #### componentDidCatch
 
-There is one lifecycle method that deserves a special recognition and that is `componentDidCatch`. It's special because it allows you to handle any errors that happen during rendering. This includes errors that happened in a lifecycle hook but excludes any asynchronously thrown errors, like after a `fetch()` call.
+注目すべきライフサイクルメソッドが1つあります。それは`componentDidCatch`です。<br>
+レンダリング中に発生したエラーを扱うことができる点が特別です。<br>
+ライフサイクルフック中に発生したエラーは扱うことができますが、`fetch()`を実行した後の非同期にスローされるエラーは扱うことができません。
 
-When an error is caught we can use this lifecycle to react to any errors and display a nice error message or any other fallback content.
+エラーが発生した場合、このライフサイクルメソッドを使ってエラーの対応をしたりエラーメッセージを表示するか代替のコンテンツを表示することができます。
 
 ```jsx
 class Catcher extends Component {
@@ -115,7 +123,9 @@ class Catcher extends Component {
 
 ## Fragments
 
-A `Fragment` allows you to return multiple elements at once. They solve the limitation of JSX where every "block" must have a single root element. You'll often encounter them in combination with lists, tables or with CSS flexbox where any intermediate element would otherwise affect styling.
+`Fragment`は一度に複数の要素を返すことを可能にします。<br>
+`Fragment`はコンポーネントが単一のルート要素を持たなければならないというJSXの制限を解決します。<br>
+中間要素がスタイリングに影響するリスト、テーブル、CSSのflexboxと組み合わせてよく使われます。
 
 ```jsx
 import { Fragment, render } from 'preact';
@@ -147,7 +157,7 @@ render(App, container);
 // </ul>
 ```
 
-Note that most modern transpilers allow you to use a shorter syntax for `Fragments`. The shorter one is a lot more common and is the one you'll typically encounter.
+最新のトランスパイラのほとんどは`Fragments`の短いシンタックスを使うことができます。短いほうが一般的です。
 
 ```jsx
 // This:
@@ -156,7 +166,7 @@ const Foo = <Fragment>foo</Fragment>;
 const Bar = <>foo</>;
 ```
 
-You can also return arrays from your components:
+コンポーネントで配列を返すこともできます。
 
 ```jsx
 function Columns() {
@@ -167,7 +177,7 @@ function Columns() {
 }
 ```
 
-Don't forget to add keys to `Fragments` if you create them in a loop:
+ループ中に`Fragments`を生成する場合は`key`を付与することを忘れないで下さい。
 
 ```jsx
 function Glossary(props) {

@@ -1,15 +1,15 @@
 ---
-name: Libraries & Add-ons
+name: ライブラリとアドオン
 permalink: '/about/addons-libraries'
-description: 'Collection of libraries and addons that work well with Preact'
+description: 'Preactで動作するライブラリとアドオン'
 ---
 
 # Libraries & Add-ons
 
-A collection of modules built to work wonderfully with Preact.
+Preactで動作するモジュールのリスト
 
-> :information_desk_person: _Built one of your own?
-> [Add it!](https://github.com/developit/preact-www/blob/master/content/about/libraries-addons.md)_
+> :information_desk_person: _あなたも何か作りましたか?
+> [それなら、加えましょう!](https://github.com/developit/preact-www/blob/master/content/about/libraries-addons.md)_
 
 ## Add-Ons
 

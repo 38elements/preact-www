@@ -1,28 +1,29 @@
 ---
-name: Project Goals
+name: プロジェクトの目的
 permalink: '/about/project-goals'
-description: "Read more about Preact's project goals"
+description: "Preactプロジェクトの目的について詳しく知る"
 ---
 
-# Preact's Goals
+# Preactの目的
 
-## Goals
+## 目的
 
-Preact aims to deliver on a few key goals:
+Preactは以下の目的を達成することを目指しています。
 
-- **Performance:** Render quickly & efficiently
-- **Size:** Small size, lightweight _(approximately 3.5kb)_
-- **Efficiency:** Effective memory usage _(avoiding GC thrash)_
-- **Understandability:** Understanding the codebase should take no more than a few hours
-- **Compatibility:** Preact aims to be _largely compatible_ with the React API. [preact/compat] attempts to achieve as much compatibility with React as possible.
+- **パフォーマンス** 高速で効率的なレンダリング
+- **サイズ** 軽量で小さいサイズ _(約3.5kb)_
+- **効率** 効率的なメモリの使用法 _(GCスラッシングの回避)_
+- **分かりやすさ** 数時間以内にコードベースを理解することができる
+- **互換性** PreactはReact APIと_大部分互換性がある_ことを目指します。 [preact/compat]はできるだけReactとの互換性を実現しようとしています。
 
-## Non-Goals
+## 目的に含まれない物
 
-Some React features are intentionally omitted from Preact, either because they are not achievable while meeting the primary project goals listed above or because they don't fit within the scope of Preact's core set of functionality.
+Reactの機能の一部は意図的にPreactでは提供されていません。
+上記のプロジェクトの目的を達成する上で障害となる機能やPreactのコア機能の範囲に収まらないからです。
 
-- The intentional items under [Differences to React](/guide/v10/differences-to-react):
-- `PropTypes`, which are easily used as a separate library
-- `Children`, can be replaced with native arrays
-- `Synthetic Events`, since Preact does not attempt to patch issues in older browsers like IE8
+意図的な[Reactとの違い](/guide/v10/differences-to-react):
+- `PropTypes`は別のライブラリにして使いやすくしました。
+- `Children`はArrayに置き換えることができます。
+- `Synthetic Events`はPreactがIE8のような古いブラウザをサポートしないのでサポートされません。
 
 [preact/compat]: /guide/v10/switching-to-preact

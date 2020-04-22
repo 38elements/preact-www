@@ -1,13 +1,15 @@
 ---
-name: Context
-description: 'Context allows you to pass props through intermediate components. This documents describes both the new and the old API'
+name: コンテキスト
+description: 'コンテキストは間にあるコンポーネントを飛ばしてpropsを渡すことができます。このドキュメントは新しいAPIと古いAPIの両方を説明します。'
 ---
 
-# Context
+# コンテキスト
 
-Context allows you to pass a value to a child deep down the tree without having to pass it through every component in-between via props. A very popular use case for this is theming. In a nutshell context can be thought of a way to do pub-sub-style updates in Preact.
+コンテキストは深い階層にある子コンポーネントとの間にあるすべてのコンポーネントの`props`を介することなく深い階層にあるコンポーネントに値を渡すことができます。一般的なユースケースはテーマの設定です。端的に言うとコンテキストはPreactでPub-Subスタイルの更新を行う方法だと考えることができます。
 
-There are two different ways to use context: Via the newer `createContext` API and the legacy context API. The difference between the two is that the legacy one can't update a child when a component inbetween aborts rendering via `shouldComponentUpdate`. That's why we highly recommend to always use `createContext`.
+コンテキストには2通りの使用方法があります。それは新しい`createContext`APIと古いコンテキストAPIです。<br>
+2つの違いは古い方は間にあるコンポーネントが`shouldComponentUpdate`でレンダリングを中止した場合、子コンポーネントを更新しないことです。<br>
+これを理由に、常に`createContext`を使うことを強く推奨します。
 
 ---
 
@@ -17,7 +19,9 @@ There are two different ways to use context: Via the newer `createContext` API a
 
 ## createContext
 
-First we need to create a context object we can pass around. This is done via the `createContext(initialValue)` function. It returns a `Provider` component that is used to set the context value and a `Consumer` one which retrieves the value from the context.
+最初にコンポーネント間を通過することができるコンテキストオブジェクを生成する必要があります。<br>
+これは`createContext(initialValue)`関数で行います。<br>
+`createContext(initialValue)`はコンテキストの値をセットするために使われる`Provider`コンポーネントとコンテキストから値を受け取る`Comsumer`コンポーネントを返します。
 
 ```jsx
 const Theme = createContext('light');
@@ -43,13 +47,18 @@ function App() {
 }
 ```
 
-> An easier way to use context is via the [useContext](/guide/v10/hooks#context) hook.
+> [useContext](/guide/v10/hooks#context)フックを使うと簡単にコンテキストを扱うことができます。
 
-## Legacy Context API
+## 古いコンテキストAPI
 
-We include the legacy API mainly for backwards-compatibility reasons. It has been superseded by the `createContext` API. The legacy API has known issues like blocking updates if there are components in-between that return `false` in `shouldComponentUpdate`. If you nonetheless need to use it, keep reading.
+古いコンテキストAPIは主に下位互換性のために存在しています。<br>
+古いコンテキストAPIは`createContext`APIに置き換えられました。<br>
+古いコンテキストAPIは間にあるコンポーネントが`shouldComponentUpdate`で`false`を返した場合、更新しない既知の問題があります。<br>
+それにもかかわらず使う必要があるなら読み続けてください。
 
-To pass down a custom variable through the context a component needs to have the `getChildContext` method. There you return the new values you want to store in the context. The context can be accessed via the second argument in function components or `this.context` in a class-based component.
+コンポーネントがコンテキストを介してデータを子コンポーネントに渡すには、コンポーネントは`getChildContext`メソッドを持つ必要があります。<br>
+`getChildContext`メソッドの返す値は既にコンテキストに格納されている値とマージされます。<br>
+コンテキストは関数コンポーネントの第2引数もしくはクラスコンポーネントの`this.context`でアクセスすることができます。
 
 ```jsx
 function ThemedButton(props, context) {

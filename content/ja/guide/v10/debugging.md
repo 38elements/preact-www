@@ -1,15 +1,15 @@
 ---
-name: Debugging Preact Apps
-description: 'How to debug Preact applications when something goes wrong.'
+name: Preactアプリケーションのデバッグ
+description: '問題が起きたときにPreactアプリケーションをデバッグする方法'
 ---
 
-# Debugging Preact Apps
+# Preactアプリケーションのデバッグ
 
-Preact ships with a lot of tools to make debugging easier. They're packaged in a single import and can be included by importing `preact/debug`.
+Preactにはデバックを容易にするツールが付属しています。それらは`preact/debug`にパッケージングされています。そして、`preact/debug`をインポートすることで使うことができます。
 
-These include integration with our own [Preact Devtools] Extension for Chrome and Firefox.
+`preact/debug`をインポートすることによってChromeやFirefoxやEdgeのブラウザ拡張である[Preact Devtools]と接続します。
 
-We'll print a warning or an error whenever we detect something wrong like incorrect nesting in `<table>` elements.
+`<table>`要素のネストが間違っている等の間違いを見つけると警告やエラーを出力します。
 
 ---
 
@@ -17,19 +17,20 @@ We'll print a warning or an error whenever we detect something wrong like incorr
 
 ---
 
-## Installation
+## インストール
 
-The [Preact Devtools] can be installed in the extension store of your browser.
+[Preact Devtools]はブラウザのウェブストアでインストールすることができます。
 
 - [For Chrome](https://chrome.google.com/webstore/detail/preact-developer-tools/ilcajpmogmhpliinlbcdebhbcanbghmd)
 - [For Firefox](https://addons.mozilla.org/en-US/firefox/addon/preact-devtools/)
 - [For Edge](https://microsoftedge.microsoft.com/addons/detail/hdkhobcafnfejjieimdkmjaiihkjpmhk)
 
-Once installed we need to import `preact/debug` somewhere to initialize the connection to the extension. Make sure that this import is **the first** import in your whole app.
+インストールした後、`preact/debug`をインポートして拡張との接続を初期化する必要があります。
+このインポートがアプリケーション全体で**最初に**インポートされていることを確認してください。
 
-> `preact-cli` does include the `preact/debug` package automatically. You can safely skip the next step if you're using it!
+> `preact-cli`は`preact/debug`を自動的に導入します。`preact-cli`を使っている場合、次のステップをスキップして大丈夫です。
 
-Here is an example of how your main entry file to your application may look like.
+アプリケーションのメインエントリーファイルに以下のように`preact/debug`をインポートします。
 
 ```jsx
 // Must be the first import
@@ -40,9 +41,10 @@ import App from './components/App';
 render(<App />, document.getElementById('root'));
 ```
 
-### Strip devtools from production
+### productionからdevtoolsを削除する
 
-Most bundlers allow you strip out code when they detect that a branch inside an `if`-statement will never be hit. We can use this to only include `preact/debug` during development and save those precious bytes in a production build.
+ほとんどのバンドラーでは必ず使われない`if`文を見つけた場合、その分岐を削除します。<br>
+これを利用してdevelopment時のみ`preact/debug`を含めることができます。そして、production時には貴重なバイト数を節約することができます。
 
 ```jsx
 // Must be the first import
@@ -58,15 +60,17 @@ import App from './components/App';
 render(<App />, document.getElementById('root'));
 ```
 
-Make sure to set the `NODE_ENV` variable to the correct value in your build tool.
+ビルドツールで`NODE_ENV`変数が正しくセットされているか確認してください。
 
-## Debug Warnings and Errors
+## デバッグ時の警告とエラー
 
-Sometimes you'll may get warnings or errors whenever Preact detects invalid code. These should all be fixed to ensure that your app works flawlessly.
+Preactが無効なコードを発見すると警告やエラーを表示することがあります。<br>
+それらを修正してアプリケーションを完璧にしましょう。
 
-### `undefined` parent passed to `render()`
+### `render()`に渡された親要素が`undefined`
 
-This means that the code is trying to render your app into nothing instead of a DOM node. It's the difference between:
+これはコードがアプリケーションをDOMノードではなく何も存在しないところにレンダリングしようとしていることを意味します。<br>
+両者の比較です。
 
 ```jsx
 // What Preact received
@@ -76,11 +80,13 @@ render(<App />, undefined);
 render(<App />, actualDomNode);
 ```
 
-The main reason this error occurs is that the DOM node isn't present when the `render()` function is called. Make sure it exists.
+このエラーが発生する主な理由は`render()`関数が実行される際にDOMが存在していないからです。<br>
+存在することを確認して下さい。
 
-### `undefined` component passed to `createElement()`
+### `createElement()`に`undefined`がコンポーネントとして渡される
 
-Preact will throw this error whenever you pass `undefined` instead of a component. The common cause for this one is mixing up `default` and `named` exports.
+Preactはコンポーネントの代わりに`undefined`を渡すとエラーをスローします。<br>
+このエラーのよくある原因は`default`エキスポートと`named`エクスポートを取り違えていることです。
 
 ```jsx
 // app.js
@@ -93,7 +99,9 @@ import { App } from './app';
 render(<App />, dom);
 ```
 
-The same error will be thrown when it's the other way around. When you declare a `named` export and are trying to use it as a `default` export. One quick way to check this (in case your editor won't do it already), is to just log out the import:
+逆の場合も同じエラーがスローされます。<br>
+それは`named`エキスポートと宣言して`default`エキスポートを使おうとする場合です。<br>
+これを手早く確かめる方法は(エディタがまだそれを実行していない場合)インポートしたものを単に表示することです。
 
 ```jsx
 // app.js
@@ -108,9 +116,9 @@ console.log(App);
 // Logs: { default: [Function] } instead of the component
 ```
 
-### Passed a JSX literal as JSX twice
+### 渡されたJSXリテラルがJSXとして2度評価される
 
-Passing a JSX-Literal or Component into JSX again is invalid and will trigger this error.
+JSXリテラルもしくはコンポーネントをJSXに再度渡すことは無効です。それはエラーを引き起こします。
 
 ```jsx
 const Foo = <div>foo</div>;
@@ -118,20 +126,24 @@ const Foo = <div>foo</div>;
 render(<Foo />, dom);
 ```
 
-To fix this, we can just pass the variable directly:
+単に変数を直接渡すだけで修正することができます。
 
 ```jsx
 const Foo = <div>foo</div>;
 render(Foo, dom);
 ```
 
-### Improper nesting of table detected
+### テーブルの不適切なネストを見つける
 
-HTML has a very clear directions on how tables should be structured. Deviating from that will lead to rendering errors that are very hard to debug. In Preact we'll detect this and print an error. To learn more about how tables should be structured we can highly recommend [the mdn documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics)
+HTMLにはテーブルの構造に対して非常に明確な方針があります。<br>
+それから外れるとデバッグすることが非常に難しいレンダリングエラーが発生します。<br>
+Preactはこれを見つけてエラーを出力します。<br>
+テーブルの構造について詳しく知りたい場合は[MDNのドキュメント](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics)を読んでください。
 
-### Invalid `ref`-property
+### 無効な`ref`プロパティ
 
-When the `ref` property contains something unexpected we'll throw this error. This includes string-based `refs` that have been deprecated a while ago.
+`ref`プロパティに不適切な値が格納されていた場合、このエラーがスローされます。<br>
+これには少し前に非推奨になった文字列ベースの`ref`プロパティも含まれます。
 
 ```jsx
 // valid
@@ -145,9 +157,11 @@ const ref = createRef();
 <div ref="ref" />
 ```
 
-### Invalid event handler
+### 無効なイベントハンドラ
 
-Sometimes you'll may accidentally pass a wrong value to an event handler. They must always be a `function` or `null` if you want to remove it. All other types are invalid.
+うっかり間違った値をイベントハンドラに渡すことがあるかもしれません。<br>
+イベントハンドラに渡す値は常に`function`もしくは`null`でなければなりません。<br>
+それ以外は無効です。
 
 ```jsx
 // valid
@@ -157,9 +171,10 @@ Sometimes you'll may accidentally pass a wrong value to an event handler. They m
 <div onClick={console.log("click")} />
 ```
 
-### Hook can only be invoked from render methods
+### フックはrender()メソッドのみで実行することができる
 
-This error occurs when you try to use a hook outside of a component. They are only supported inside a function component.
+このエラーはコンポーネントの外でフックを使用したときに発生します。<br>
+フックは関数コンポーネントの内側でのみサポートされています。
 
 ```jsx
 // Invalid, must be used inside a component
@@ -172,9 +187,9 @@ function Foo() {
 }
 ```
 
-### Getting `vnode.[property]` is deprecated
+### 非推奨の`vnode.[property]`を使用する
 
-With Preact X we did some breaking changes to our internal `vnode` shape.
+Preact Xは内部の`vnode`のプロパティ名に互換性を破壊する変更を加えました。
 
 | Preact 8.x         | Preact 10.x            |
 | ------------------ | ---------------------- |
@@ -182,9 +197,11 @@ With Preact X we did some breaking changes to our internal `vnode` shape.
 | `vnode.attributes` | `vnode.props`          |
 | `vnode.children`   | `vnode.props.children` |
 
-### Found children with the same key
+### 子要素のkey属性が重複している
 
-One unique aspect about virtual-dom based libraries is that they have to detect when a children is moved around. However to know which child is which, we need to flag them somehow. _This is only necessary when you're creating children dynamically._
+仮想DOMベースのライブラリのユニークな点の1つは子要素が移動した場合、それを見つける必要があることです。<br>
+しかし、どの子要素がどれであるかを知るためにフラグを立てる必要があります。<br>
+_これは動的に子要素を生成する場合にのみ必要です。_
 
 ```jsx
 // Both children will have the same key "A"
@@ -193,7 +210,8 @@ One unique aspect about virtual-dom based libraries is that they have to detect 
 </div>
 ```
 
-The correct way to do it is to give them unique keys. In most cases the data you're iterating over will have some form of `id`.
+それを行う正しい方法はユニークなキーを付与することです。
+ほとんどの場合、反復処理を行うデータは何らかの形で`id`を持っています。
 
 ```jsx
 const persons = [

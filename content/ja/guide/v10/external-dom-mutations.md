@@ -1,14 +1,14 @@
 ---
-name: External DOM Mutations
+name: Preact外のDOMを埋め込む
 permalink: '/guide/external-dom-mutations'
-description: 'How to integrate Preact with jQuery and other JavaScript snippets which mutate the DOM directly'
+description: 'PreactとjQueryやその他の直接DOMを操作するJavaScriptのスニペットと連携する方法'
 ---
 
-# External DOM Mutations
+# Preact外のDOMを埋め込む
 
-Sometimes there is a need to work with third-party libraries that expect to be able to freely mutate the DOM, persist state within it, or that have no component boundaries at all. There are many great UI toolkits or re-usable elements that operate this way.
+DOMを自由に操作したり、状態を保持したり、コンポーネントに組み込まれること想定しているサードパーティライブラリと連携する必要がある場合があります。多くのこのように動作する素晴らしいUIツールキットや再利用可能な要素が存在します。
 
-In Preact (and similarly in React), working with these types of libraries requires that you tell the Virtual DOM rendering/diffing algorithm that it shouldn't try to _undo_ any external DOM mutations performed within a given Component (or the DOM element it represents).
+Preact(Reactも同様)ではこのタイプのライブラリと連携するために仮想DOMのrendering/diffingアルゴリズムに指定したコンポーネント(もしくはそのDOM要素)が外部のDOMの予期しない変更を_undo_しないようにする必要があります。
 
 ---
 
@@ -16,9 +16,9 @@ In Preact (and similarly in React), working with these types of libraries requir
 
 ---
 
-## Technique
+## テクニック
 
-This can be as simple as defining a `shouldComponentUpdate()` method on your component, and having it return `false`:
+これはコンポーネントに`false`を返す`shouldComponentUpdate()`メソッドを定義するだけで簡単にできます。
 
 ```jsx
 class Block extends Component {
@@ -28,7 +28,7 @@ class Block extends Component {
 }
 ```
 
-... or for shorthand:
+短く書くと以下のようになります。
 
 ```jsx
 class Block extends Component {
@@ -36,33 +36,36 @@ class Block extends Component {
 }
 ```
 
-With this lifecycle hook in place and telling Preact not to re-render the Component when changes occur up the VDOM tree, your Component now has a reference to its root DOM element that can be treated as static until the Component is unmounted. As with any component that reference is simply called `this.base`, and corresponds to the root JSX Element that was returned from `render()`.
+このライフサイクルフックを追加することで、VDOMツリーが変更された際に再レンダリングしません。<br>
+これによって、コンポーネントは削除されるまで静的なコンポーネントのルートDOM要素への参照を保持します。<br>
+コンポーネントのルートDOM要素への参照は`this.base`です。それは`render()`が返したルートJSX要素に対応するDOM要素です。
 
 ---
 
-## Example Walk-Through
+## 概要
 
-Here is an example of "turning off" re-rendering for a Component.  Note that `render()` is still invoked as part of creating and mounting the Component, in order to generate its initial DOM structure.
+以下はコンポーネントの再レンダリングを"オフ"にする例です。<br>
+`render()`は最初のDOM構造を生成するためにコンポーネントを生成し配置する過程で実行されることに注意してください。
 
 ```jsx
 class Example extends Component {
   shouldComponentUpdate() {
-    // do not re-render via diff:
+    // 差分による再レンダリングをしません。
     return false;
   }
 
   componentWillReceiveProps(nextProps) {
-    // you can do something with incoming props here if you need
+    // 必要に応じてpropsが来たときの処理を書きます。
   }
 
   componentDidMount() {
-    // now mounted, can freely modify the DOM:
+    // 配置されました。自由にDOMを操作することができます。
     let thing = document.createElement('maybe-a-custom-element');
     this.base.appendChild(thing);
   }
 
   componentWillUnmount() {
-    // component is about to be removed from the DOM, perform any cleanup.
+    // コンポーネントがDOMから削除されます。DOMのクリーンアップ処理をここに書きます。
   }
 
   render() {
@@ -72,13 +75,16 @@ class Example extends Component {
 ```
 
 
-## Demonstration
+## デモ
 
-[![demo](https://i.gyazo.com/a63622edbeefb2e86d6c0d9c8d66e582.gif)](http://www.webpackbin.com/V1hyNQbpe)
+[![デモ](https://i.gyazo.com/a63622edbeefb2e86d6c0d9c8d66e582.gif)](http://www.webpackbin.com/V1hyNQbpe)
 
-[**View this demo on Webpackbin**](https://www.webpackbin.com/bins/-KflCmJ5bvKsRF8WDkzb)
+[**Webpackbinで動くデモを見る**](https://www.webpackbin.com/bins/-KflCmJ5bvKsRF8WDkzb)
 
 
-## Real-World Examples
+## 実際の例
 
-Alternatively, see this technique in action in [preact-token-input](https://github.com/developit/preact-token-input/blob/master/src/index.js) - it uses a component as a foothold in the DOM, but then disables updates and lets [tags-input](https://github.com/developit/tags-input) take over from there.  A more complex example would be [preact-richtextarea](https://github.com/developit/preact-richtextarea), which uses this technique to avoid re-rendering an editable `<iframe>`.
+または、[preact-token-input](https://github.com/developit/preact-token-input/blob/master/src/index.js)で、このテクニックの使い方を確認してください。
+`preact-token-input`はDOM内の足場としてコンポーネントを使用します。
+`preact-token-input`はコンポーネントの更新を無効にしてinput要素の処理を[tags-input](https://github.com/developit/tags-input)に引き継がせます。<br>
+より複雑な例として[preact-richtextarea](https://github.com/developit/preact-richtextarea)があります。これは編集可能な`<iframe>`の再レンダリングを避けるテクニックを使っています。

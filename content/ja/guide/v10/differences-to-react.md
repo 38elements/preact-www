@@ -1,14 +1,14 @@
 ---
-name: Differences to React
+name: Reactとの違い
 permalink: '/guide/differences-to-react'
-description: 'What are the differences between Preact and React. This document describes them in detail'
+description: 'ReactとPreactの違いは何でしょう。このドキュメントはそれらを詳細に解説します。'
 ---
 
-# Differences to React
+# Reactとの違い
 
-Preact itself is not intended to be a reimplementation of React. There are differences. Many of these differences are trivial, or can be completely removed by using [preact/compat], which is a thin layer over Preact that attempts to achieve 100% compatibility with React.
+PreactはReactの再実装を意図したものではありません。両者には違いがあります。ほとんどの違いは取るに足らない物か、[preact/compat]によって吸収されます。[preact/compat]はReactとの互換性を100%達成しようと試みている薄いレイヤーです。
 
-The reason Preact does not attempt to include every single feature of React is in order to remain **small** and **focused** - otherwise it would make more sense to simply submit optimizations to the React project, which is already a very complex and well-architected codebase.
+PreactがReactの機能をすべて含まない理由は**小さい**、**集中した**状態を保ちたいからです。そうでないなら、単にReactプロジェクトを最適化する方が合理的です。Reactは既にとても複雑で素晴らしいアーキテクチャのコードベースです。
 
 ---
 
@@ -16,33 +16,40 @@ The reason Preact does not attempt to include every single feature of React is i
 
 ---
 
-## Main differences
+## 主な違い
 
-The main difference when comparing Preact and React apps is that we don't ship our own Synthetic Event system. Preact uses the browser's native `addEventlistener` for event handling internally. See [GlobalEventHandlers] for a full list of DOM event handlers.
+PreactとReactの主な違いはPreactには合成イベント(Synthetic Event)がないことです。<br>
+Preactはイベント処理に内部でブラウザネイティブの`addEventlistener`を使用しています。<br>
+DOMイベントハンドラの完全はリストは[GlobalEventHandlers]にあります。
 
-For us it doesn't make sense as the browser's event system supports all features we need. A full custom event implementation would mean more maintenance overhead and a larger API surface area for us.
+ブラウザのイベントシステムはPreactにとって必要なすべての機能を満たしているので合成イベントは意味がありません。<br>
+合成イベントのようなカスタムイベントを完全に実装するとメンテナンスのオーバーヘッドが増加しAPIが複雑になります。
 
-We've come across the following differences between React's synthetic event system and native browser events:
+Reactの合成イベントとブラウザのネイティブイベントに以下のような違いがあります。
 
-- Browser events don't bubble through `<Portal>`-Components
-- The clear "x" button in IE11 for `<input type="search">` elements does not fire an `input` event.
-- Use `onInput` instead `onChange` for `<input>`-elements (**only if `preact/compat` is not used**)
+- ブラウザイベントは`<Portal>`コンポーネントをイベントバブリングで通過しません。
+- IE11で`<input type="search">`要素の"x"クリアボタンは`input`イベントを発火しません。
+- `<input>`要素では`onChange`の代わりに`onInput`を使用してください。 (**`preact/compat`を使用していない場合のみ**)
 
-The other main difference is that we follow a bit more closely the DOM specification. One example of that is that you can use `class` instead of `className`.
+その他の主な違いはDOMの使用に少しだけ厳密に準拠していることです。<br>
+それの一つの例は`className`の代わりに`class`を使うことができることです。
 
-## Version Compatibility
+## バージョンの互換性
 
-For both Preact and [preact/compat], version compatibility is measured against the _current_ and _previous_ major releases of React. When new features are announced by the React team, they may be added to Preact's core if it makes sense given the [Project Goals]. This is a fairly democratic process, constantly evolving through discussion and decisions made in the open, using issues and pull requests.
+Preactと[preact/compat]の両方で、バーションの互換性はReactの現在と過去のメジャーリリースを参考にします。<br>
+新機能がReactチームによって発表された場合、[Projectの目的]にとって意味がある場合はPreactコアに追加されるかもしれません。<br>
+これはとても民主的なプロセスです。Preactはissueやpull requestを通じでオープンに議論や意思決定をして継続的に進化し続けています。
 
-> Thus, the website and documentation reflect React `0.16.x` and `15.x` when discussing compatibility or making comparisons.
+> 従って、ウェブサイトとドキュメントのPreactとReactの互換性や比較はReact`16.x`と`15.x`が反映されています。
 
-## Features unique to Preact
+## Preact固有の機能
 
-Preact actually adds a few convenient features inspired by work in the (P)React community:
+Preactは実際に(P)Reactコミュニティの作業から生まれたアイディアからいくつかの便利な機能を追加しています。
 
-### Arguments in `Component.render()`
+### `Component.render()`の引数
 
-For convenience we pass `this.props` and `this.state` of a class component to the `render()`. Take a look at this component which uses one prop and one state property.
+便利なので、クラスコンポーネントの`this.props`と`this.state`を`render()`に渡します。<br>
+1つの`props`と1つの`state`を使用する以下のコンポーネントを見てください。
 
 ```jsx
 // Works in both Preact and React
@@ -55,7 +62,7 @@ class Foo extends Component {
 }
 ```
 
-In Preact this is can be also written like this:
+Preactではこれを以下のように書くことができます。
 
 ```jsx
 // Only works in Preact
@@ -68,12 +75,12 @@ class Foo extends Component {
 }
 ```
 
-Both snippets render the exact same thing. It's just a matter of stylistic preference.
+両方とも全く同じ物をレンダリングします。どちらのスタイルを選ぶかは単なる好みの問題です。
 
-### Raw HTML attribute/property names
+### 生のHTML属性/プロパティ名
 
-With Preact we follow more closely the DOM specification supported by all major browsers. One prominent difference is that you can use the
-standard `class` attribute instead of `className`.
+PreactはReactよりすべての主要なブラウザでサポートされているDOMの仕様を厳守しています。<br>
+Reactとの主な違いの1つは`className`属性の代わりに標準の`class`属性を使うことができることです。
 
 ```jsx
 // This:
@@ -83,11 +90,13 @@ standard `class` attribute instead of `className`.
 <div className="foo" />
 ```
 
-Most Preact developers prefer to use `class` because it's shorter to write, but both are supported.
+両方ともサポートされていますが、ほとんどのPreact開発者は短く書くことができるので`class`を使うことを好みます。
 
-### Use `onInput` instead of `onChange`
+### `onChange`の代わりに`onInput`を使う
 
-For historical reasons React basically aliased `onChange` to `onInput`. The latter is the one that's native to the DOM and supported everywhere. The `input` event is what you're looking for in nearly all cases where you want to be notified when the form control is updated.
+歴史的な理由によって、Reactは基本的に`onInput`を`onChange`に割り当てます。<br>
+`onInput`はDOMネイティブです。そしてPreactがサポートされているすべてのブラウザでサポートされています。<br>
+`input`イベントはフォームコントロールが更新された際に通知を受けたいほとんどすべての場合で役立つイベントです。
 
 ```jsx
 // React
@@ -97,11 +106,14 @@ For historical reasons React basically aliased `onChange` to `onInput`. The latt
 <input onInput={e => console.log(e.target.value)} />
 ```
 
-If you're using [preact/compat] we'll set up this alias for `onChange` to `onInput` globally similar to React. This is one of the tricks we use to ensure maximum compatibility with the React ecosystem.
+[preact/compat]を使っている場合、Reactのように`onInput`を`onChange`に割り当てます。<br>
+これはReactのエコシステムとの互換性を最大限に確保するためです。
 
-### JSX-Constructor
+### JSXコンストラクタ
 
-This idea was originally called [hyperscript] and has value well beyond the React ecosystem, so Preact promotes the original standard. ([Read: why `h()`?](http://jasonformat.com/wtf-is-jsx)). If you're looking at the transpiled output, it's a bit easier to read than `React.createElement`.
+このアイディアは元は[hyperscript]と呼ばれていました。これはReactのエコシステムを超える価値があります。<br>
+だから、Preactは元のやり方を推奨しています。([詳しくは: why `h()`?](http://jasonformat.com/wtf-is-jsx))<br>
+`h()`はトランスパイルされたコードを見ると`React.createElement`より少し読みやすいです。
 
 ```js
 h(
@@ -118,19 +130,25 @@ React.createElement(
 );
 ```
 
-In most Preact apps you'll encounter `h()`, but we support both in core, so it doesn't really matter which one you'll use.
+ほとんどのPreactアプリケーションでは`h()`が使用されています。<br>
+しかし、コアでは`h()`と`createElement()`の両方がサポートされています。<br>
+だから、どちらを使うかは重要ではありません。
 
-### No contextTypes needed
+### contextTypesは必要ありません
 
-The legacy `Context`-API requires Components to implement `contextTypes` or `childContextTypes` in React. With Preact we don't have that limitation and all Components receive the all `context` entries drawn from `getChildContext()`.
+Reactの古いコンテキストAPIではコンポーネントに`contextTypes`もしくは`childContextTypes`を実装する必要があります。<br>
+Preactではこの制限はありません。すべてのコンポーネントは`getChildContext()`から生成されたすべての`context`の値を受け取ります。
 
-## Features exclusive to `preact/compat`
+## `preact`には無くて`preact/compat`に有る機能
 
-`preact/compat` is our **compat**ibility layer that translates React code to Preact. For existing React users this makes it very easy to try out Preact by just setting up a few aliases in their bundler configuration and leaving the rest of their code as is.
+`preact/compat`はReactのコードをPreactに移行するための**互換**レイヤーです。<br>
+既存のReactユーザはコードはそのままでバンドラの設定にいくつかのエイリアスをセットするだけで<br>
+とても手軽にPreactを試すことができます。
 
-### Children-API
+### Children API
 
-The `Children`-API is a specialized way to iterate over a component's `children`. For Preact this API is not needed and we recommend to use the native array methods instead.
+Reactの`Children`APIはコンポーネントの`children`を反復処理するためのAPIです。<br>
+PreactではこのAPIは必要ありません。代わりにネイティブの配列のメソッドを使います。
 
 ```jsx
 // React
@@ -144,18 +162,18 @@ function App(props) {
 }
 ```
 
-### Specialised Components
+### 固有のコンポーネント
 
-[preact/compat] ships with specialised components that are not necessary for every app. These include
+[preact/compat]は以下のような特殊な用途で使用することを目的としたコンポーネントを提供しています。
 
-- [PureComponent](/guide/v10/switching-to-preact#purecomponent): Only updates if `props` or `state` have changed
-- [memo](/guide/v10/switching-to-preact#memo): Similar in spirit to `PureComponent` but allows to use a custom comparison function
-- [forwardRef](/guide/v10/switching-to-preact#forwardRef): Supply a `ref` to a specified child component.
-- [Portals](/guide/v10/switching-to-preact#portals): Continues rendering the current tree into a different DOM container
-- [Suspense](/guide/v10/switching-to-preact#suspense): **experimental** Allows to display fallback content in case the tree is not ready
-- [lazy](/guide/v10/switching-to-preact#suspense): **experimental** Lazy load async code and mark a tree as ready/not ready accordingly.
+- [PureComponent](/guide/v10/switching-to-preact#purecomponent): `props`もしくは`state`が変化した場合のみ更新されます。
+- [memo](/guide/v10/switching-to-preact#memo): `PureComponent`と用途が似ていますがこちらは比較のための関数を指定することができます。
+- [forwardRef](/guide/v10/switching-to-preact#forwardRef): 指定した子コンポーネントに`ref`をセットします。
+- [Portals](/guide/v10/switching-to-preact#portals): 指定した仮想DOMツリーを別のDOMコンテナにレンダリングします。
+- [Suspense](/guide/v10/switching-to-preact#suspense): **実験的機能** 仮想DOMツリーの準備ができていない間は予備の仮想DOMツリーのレンダリングを可能にします。
+- [lazy](/guide/v10/switching-to-preact#suspense): **実験的機能** 非同期のコードを遅延ロードします。ロード完了を通知します。
 
-[Project Goals]: /about/project-goals
+[Projectの目的]: /about/project-goals
 [hyperscript]: https://github.com/dominictarr/hyperscript
 [preact/compat]: /guide/v10/switching-to-preact
 [GlobalEventHandlers]: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers

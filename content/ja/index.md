@@ -12,8 +12,8 @@ description: 'Preact is a fast 3kB alternative to React with the same modern API
     </h1>
     <p class="tagline">Fast 3kB alternative to React with the same modern API.</p>
     <p class="intro-buttons">
-        <a href="/guide/v10/getting-started" class="btn primary">Get Started</a>
-        <a href="/guide/v10/switching-to-preact" class="btn secondary">Switch to Preact</a>
+        <a href="/guide/v10/getting-started" class="btn primary">はじめに</a>
+        <a href="/guide/v10/switching-to-preact" class="btn secondary">Preactへ移行する</a>
     </p>
 </jumbotron>
 
@@ -32,25 +32,25 @@ function Counter() {
 ```
 
 <section class="sponsors">
-  <p>Proudly <a href="https://opencollective.com/preact">sponsored by:</a></p>
+  <p>誇らしい<a href="https://opencollective.com/preact">スポンサー</a></p>
   <sponsors></sponsors>
 </section>
 
 <section class="home-top">
-    <h1>A different kind of library.</h1>
+    <h1>Preactの特徴</h1>
 </section>
 
 <section class="home-section">
   <img src="/assets/home/metal.svg" alt="metal">
 
   <div>
-    <h2>Closer to the DOM</h2>
+    <h2>DOMに近い</h2>
     <p>
-      Preact provides the thinnest possible Virtual DOM abstraction on top of the DOM.
-      It builds on stable platform features, registers real event handlers and plays nicely with other libraries.
+      PreactはDOMをベースに可能な限り薄い仮想DOMによる抽象化を提供します。
+      安定したプラットフォームの機能をベースに構築され、実際のイベントハンドラを登録します。そして、他のライブラリとうまく連携します。
     </p>
     <p>
-      Preact can be used directly in the browser without any transpilation steps.
+      Preactはトランスパイルなしで直接ブラウザで使用することができます。
     </p>
   </div>
 </section>
@@ -59,13 +59,13 @@ function Counter() {
   <img src="/assets/home/size.svg" alt="size">
 
   <div>
-    <h2>Small Size</h2>
+    <h2>サイズが小さい</h2>
     <p>
-      Most UI frameworks are large enough to be the majority of an app's JavaScript size.
-      Preact is different: it's small enough that <em>your code</em> is the largest part of your application.
+      ほとんどのUIフレームワークはアプリケーションを構成するJavaScriptのサイズの大部分を占めると言っていいくらいの大きいです。
+      Preactは違います。<em>あなたが書いたコード</em>がアプリケーションの大部分を占めると言っていいくらい小さいです。
     </p>
     <p>
-      That means less JavaScript to download, parse and execute - leaving more time for your code, so you can build an experience you define without fighting to keep a framework under control.
+      つまり、ダウンロードしてパースして実行するJavaScriptが少ないので、コードを書くことにより多くの時間を費やすことができます。フレームワークを使いこなすことに苦闘することなく機能を開発することができます。
     </p>
   </div>
 </section>
@@ -74,13 +74,14 @@ function Counter() {
   <img src="/assets/home/performance.svg" alt="performance">
 
   <div>
-    <h2>Big Performance</h2>
+    <h2>卓越したパフォーマンス</h2>
     <p>
-      Preact is fast, and not just because of its size. It's one of the fastest Virtual DOM libraries out there, thanks to a simple and predictable diff implementation.
+      Preactが高速な理由は単にサイズだけではありません。
+      シンプルで堅実な差分機能の実装よって最も高速な仮想DOMライブラリの1つになりました。
     </p>
     <p>
-      We automatically batch updates and tune Preact to the extreme when it comes to performance. We work closely with
-      browser engineers to get the maximum performance possible out of Preact.
+      私達はPreactを改善し続けて限界までチューニングしています。
+      私達は可能な限り最大限Preactのパフォーマンスを引き出せるようにブラウザの開発者と親密に協力しています。
     </p>
   </div>
 </section>
@@ -89,12 +90,13 @@ function Counter() {
   <img src="/assets/home/portable.svg" alt="portable">
 
   <div>
-    <h2>Portable &amp; Embeddable</h2>
+    <h2>応用できる範囲が広い & 組み込みに適している</h2>
     <p>
-      Preact's tiny footprint means you can take the powerful Virtual DOM Component paradigm to new places it couldn't otherwise go.
+      Preactの小さいサイズは他のライブラリが進出できないような新しい用途を開拓しました。
     </p>
     <p>
-      Use Preact to build parts of an app without complex integration. Embed Preact into a widget and apply the same tools and techniques that you would to build a full app.
+      Preactを使うと複雑なインテグレーションなしでアプリケーションのパーツを実装できます。
+      Preactをウィジットに組み込む際はアプリケーション全体を構築する時と同じツールやテクニックを使用できます。
     </p>
   </div>
 </section>
@@ -103,13 +105,13 @@ function Counter() {
   <img src="/assets/home/productive.svg" alt="productive">
 
   <div>
-    <h2>Instantly Productive</h2>
+    <h2>すぐに生産性を上げる</h2>
     <p>
-      Lightweight is a lot more fun when you don't have to sacrifice productivity to get there. Preact gets you productive right away. It even has a few bonus features:
+      生産性を犠牲にしなくてよいなら軽量フレームワークはとても楽しいです。Preactはすぐに生産性を上げます。ボーナス機能もあります。
     </p>
     <ul>
-      <li><code>props</code>, <code>state</code> and <code>context</code> are passed to <code>render()</code></li>
-      <li>Use standard HTML attributes like <code>class</code> and <code>for</code></li>
+      <li><code>props</code>、<code>state</code>、<code>context</code>は<code>render()</code>に渡されます。</li>
+      <li><code>class</code>や<code>for</code>のような標準的なHTML属性を使用します。</li>
     </ul>
   </div>
 </section>
@@ -118,25 +120,25 @@ function Counter() {
   <img src="/assets/home/compatible.svg" alt="compatible">
 
   <div>
-    <h2>Ecosystem Compatible</h2>
+    <h2>エコシステムの互換性</h2>
     <p>
-      Virtual DOM Components make it easy to share reusable things - everything from buttons to data providers.
-      Preact's design means you can seamlessly use thousands of Components available in the React ecosystem.
+      仮想DOMコンポーネントはボタンからデータプロバイダまですべての再利用可能なコンポーネントを共有することを簡単にします。
+      PreactはReactのエコシステムにある何千ものコンポーネントをシームレスに利用できるように設計されています。
     </p>
     <p>
-      Adding a simple <a href="/guide/v10/switching-to-preact#how-to-alias-preact-compat">preact/compat</a> alias to your bundler provides a compatibility layer
-      that enables even the most complex React components to be used in your application.
+      バンドラーに<a href="/guide/v10/switching-to-preact#how-to-alias-preact-compat">preact/compat</a>を加えるちょっとした変更を加えることで
+      複雑なReactコンポーネントでもアプリケーションで使用することができる互換レイヤーを提供することができます。
     </p>
   </div>
 </section>
 
 <section class="home-top">
-    <h1>See it in action.</h1>
+    <h1>動くものを見てみましょう。</h1>
 </section>
 
 <section class="home-split">
     <div>
-        <h2>Todo List Component</h2>
+        <h2>Todoリスト</h2>
         <pre><code class="lang-jsx">
 export default class TodoList extends Component {
     state = { todos: [], text: '' };
@@ -168,7 +170,7 @@ export default class TodoList extends Component {
         </code></pre>
     </div>
     <div>
-        <h2>Running Example</h2>
+        <h2>実行結果</h2>
         <pre repl="false"><code class="lang-jsx">
 import TodoList from './todo-list';
 
@@ -182,7 +184,7 @@ render(&lt;TodoList /&gt;, document.body);
 
 <section class="home-split">
     <div>
-        <h2>Fetch GitHub Stars</h2>
+        <h2>GitHubのスター数を取得</h2>
         <pre><code class="lang-jsx">
 export default class Stars extends Component {
     async componentDidMount() {
@@ -201,7 +203,7 @@ export default class Stars extends Component {
         </code></pre>
     </div>
     <div>
-        <h2>Running Example</h2>
+        <h2>実行結果</h2>
         <pre repl="false"><code class="lang-jsx">
 import Stars from './stars';
 
@@ -217,17 +219,17 @@ render(
 </section>
 
 <section class="home-top">
-    <h1>Ready to dive in?</h1>
+    <h1>Preactについてもっと知りたいですか?</h1>
 </section>
 
 <section style="text-align:center;">
     <p>
-        We've got separate guides based on whether you have experience with React.
+        Reactの経験があるかどうかに応じてガイドを別けています。
         <br>
-        Pick the guide that works best for you!
+        最適なガイドを選びましょう。
     </p>
     <p>
-        <a href="/guide/v10/getting-started" class="btn primary">Get Started</a>
-        <a href="/guide/v10/switching-to-preact" class="btn secondary">Switch to Preact</a>
+        <a href="/guide/v10/getting-started" class="btn primary">はじめに</a>
+        <a href="/guide/v10/switching-to-preact" class="btn secondary">Preactへ移行する</a>
     </p>
 </section>

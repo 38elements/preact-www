@@ -1,14 +1,14 @@
 ---
-name: We Are Using
-title: Who's using Preact?
+name: Preact使ってるよ
+title: 誰がPreactをつかっていますか?
 permalink: '/about/we-are-using'
-description: 'Companies who are proudly using Preact'
+description: 'Preactを使っている会社'
 ---
 
-Preact is used by a wide spectrum of websites, from Open Source projects to large multinational corporations.
-Below is a small sampling of organizations that depend on Preact for public-facing projects.
+Preactはオープンソースから大きな多国籍企業まで幅広いウェブサイトに使われています。
+以下は一般公開しているプロジェクトでPreactを使用している組織の一部です。
 
-Does your company use Preact? [Add it to the list!](https://github.com/preactjs/preact-www/blob/master/src/components/we-are-using/index.js)
+あなたの会社はPreactを使っていますか? それなら、[リストに加えましょう!](https://github.com/preactjs/preact-www/blob/master/src/components/we-are-using/index.js)
 
 <div class="breaker">
   <we-are-using></we-are-using>
