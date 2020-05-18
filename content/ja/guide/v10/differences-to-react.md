@@ -18,11 +18,11 @@ PreactがReactの機能をすべて含まない理由は**小さい**、**集中
 
 ## 主な違い
 
-PreactとReactの主な違いはPreactには合成イベント(Synthetic Event)がないことです。<br>
-Preactはイベント処理に内部でブラウザネイティブの`addEventlistener`を使用しています。<br>
+PreactとReactの主な違いはPreactには合成イベント(Synthetic Event)がないことです。
+Preactはイベント処理に内部でブラウザネイティブの`addEventlistener`を使用しています。
 DOMイベントハンドラの完全はリストは[GlobalEventHandlers]にあります。
 
-ブラウザのイベントシステムはPreactにとって必要なすべての機能を満たしているので合成イベントは意味がありません。<br>
+ブラウザのイベントシステムはPreactにとって必要なすべての機能を満たしているので合成イベントは意味がありません。
 合成イベントのようなカスタムイベントを完全に実装するとメンテナンスのオーバーヘッドが増加しAPIが複雑になります。
 
 Reactの合成イベントとブラウザのネイティブイベントに以下のような違いがあります。
@@ -31,13 +31,13 @@ Reactの合成イベントとブラウザのネイティブイベントに以下
 - IE11で`<input type="search">`要素の"x"クリアボタンは`input`イベントを発火しません。
 - `<input>`要素では`onChange`の代わりに`onInput`を使用してください。 (**`preact/compat`を使用していない場合のみ**)
 
-その他の主な違いはDOMの使用に少しだけ厳密に準拠していることです。<br>
+その他の主な違いはDOMの使用に少しだけ厳密に準拠していることです。
 それの一つの例は`className`の代わりに`class`を使うことができることです。
 
 ## バージョンの互換性
 
-Preactと[preact/compat]の両方で、バーションの互換性はReactの現在と過去のメジャーリリースを参考にします。<br>
-新機能がReactチームによって発表された場合、[Projectの目的]にとって意味がある場合はPreactコアに追加されるかもしれません。<br>
+Preactと[preact/compat]の両方で、バーションの互換性はReactの現在と過去のメジャーリリースを参考にします。
+新機能がReactチームによって発表された場合、[Projectの目的]にとって意味がある場合はPreactコアに追加されるかもしれません。
 これはとても民主的なプロセスです。Preactはissueやpull requestを通じでオープンに議論や意思決定をして継続的に進化し続けています。
 
 > 従って、ウェブサイトとドキュメントのPreactとReactの互換性や比較はReact`16.x`と`15.x`が反映されています。
@@ -48,7 +48,7 @@ Preactは実際に(P)Reactコミュニティの作業から生まれたアイデ
 
 ### `Component.render()`の引数
 
-便利なので、クラスコンポーネントの`this.props`と`this.state`を`render()`に渡します。<br>
+便利なので、クラスコンポーネントの`this.props`と`this.state`を`render()`に渡します。
 1つの`props`と1つの`state`を使用する以下のコンポーネントを見てください。
 
 ```jsx
@@ -79,7 +79,7 @@ class Foo extends Component {
 
 ### 生のHTML属性/プロパティ名
 
-PreactはReactよりすべての主要なブラウザでサポートされているDOMの仕様を厳守しています。<br>
+PreactはReactよりすべての主要なブラウザでサポートされているDOMの仕様を厳守しています。
 Reactとの主な違いの1つは`className`属性の代わりに標準の`class`属性を使うことができることです。
 
 ```jsx
@@ -94,8 +94,8 @@ Reactとの主な違いの1つは`className`属性の代わりに標準の`class
 
 ### `onChange`の代わりに`onInput`を使う
 
-歴史的な理由によって、Reactは基本的に`onInput`を`onChange`に割り当てます。<br>
-`onInput`はDOMネイティブです。そしてPreactがサポートされているすべてのブラウザでサポートされています。<br>
+歴史的な理由によって、Reactは基本的に`onInput`を`onChange`に割り当てます。
+`onInput`はDOMネイティブです。そしてPreactがサポートされているすべてのブラウザでサポートされています。
 `input`イベントはフォームコントロールが更新された際に通知を受けたいほとんどすべての場合で役立つイベントです。
 
 ```jsx
@@ -106,13 +106,13 @@ Reactとの主な違いの1つは`className`属性の代わりに標準の`class
 <input onInput={e => console.log(e.target.value)} />
 ```
 
-[preact/compat]を使っている場合、Reactのように`onInput`を`onChange`に割り当てます。<br>
+[preact/compat]を使っている場合、Reactのように`onInput`を`onChange`に割り当てます。
 これはReactのエコシステムとの互換性を最大限に確保するためです。
 
 ### JSXコンストラクタ
 
-このアイディアは元は[hyperscript]と呼ばれていました。これはReactのエコシステムを超える価値があります。<br>
-だから、Preactは元のやり方を推奨しています。([詳しくは: why `h()`?](http://jasonformat.com/wtf-is-jsx))<br>
+このアイディアは元は[hyperscript]と呼ばれていました。これはReactのエコシステムを超える価値があります。
+だから、Preactは元のやり方を推奨しています。([詳しくは: why `h()`?](http://jasonformat.com/wtf-is-jsx))
 `h()`はトランスパイルされたコードを見ると`React.createElement`より少し読みやすいです。
 
 ```js
@@ -130,24 +130,24 @@ React.createElement(
 );
 ```
 
-ほとんどのPreactアプリケーションでは`h()`が使用されています。<br>
-しかし、コアでは`h()`と`createElement()`の両方がサポートされています。<br>
+ほとんどのPreactアプリケーションでは`h()`が使用されています。
+しかし、コアでは`h()`と`createElement()`の両方がサポートされています。
 だから、どちらを使うかは重要ではありません。
 
 ### contextTypesは必要ありません
 
-Reactの古いコンテキストAPIではコンポーネントに`contextTypes`もしくは`childContextTypes`を実装する必要があります。<br>
+Reactの古いコンテキストAPIではコンポーネントに`contextTypes`もしくは`childContextTypes`を実装する必要があります。
 Preactではこの制限はありません。すべてのコンポーネントは`getChildContext()`から生成されたすべての`context`の値を受け取ります。
 
 ## `preact`には無くて`preact/compat`に有る機能
 
-`preact/compat`はReactのコードをPreactに移行するための**互換**レイヤーです。<br>
-既存のReactユーザはコードはそのままでバンドラの設定にいくつかのエイリアスをセットするだけで<br>
+`preact/compat`はReactのコードをPreactに移行するための**互換**レイヤーです。
+既存のReactユーザはコードはそのままでバンドラの設定にいくつかのエイリアスをセットするだけで
 とても手軽にPreactを試すことができます。
 
 ### Children API
 
-Reactの`Children`APIはコンポーネントの`children`を反復処理するためのAPIです。<br>
+Reactの`Children`APIはコンポーネントの`children`を反復処理するためのAPIです。
 PreactではこのAPIは必要ありません。代わりにネイティブの配列のメソッドを使います。
 
 ```jsx

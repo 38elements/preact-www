@@ -1,13 +1,13 @@
 ---
-name: Getting Started
-description: "How to get started with Preact. We'll learn how to setup the tooling (if any) and get going with writing an application."
+name: はじめに
+description: "初歩的なPreactの使い方の説明をします。ここではツールの設定やアプリケーションを書く方法を説明します。"
 ---
 
-# Getting Started
+# はじめに
 
-This guide helps you get up and running to start developing Preact apps.
+このガイドはPreactのアプリケーションを開発する最初の一歩に役立ちます。
 
-There are 3 popular options. If you're new to Preact, we recommend starting with [Preact CLI](#best-practices-powered-by-preact-cli).
+ここでは主要な3つの方法を紹介します。あなたがPreact初心者なら、[Preact CLI](#preact-cliを使ったお勧めの方法)を選択することを勧めます。
 
 ---
 
@@ -15,9 +15,9 @@ There are 3 popular options. If you're new to Preact, we recommend starting with
 
 ---
 
-## No build tools route
+## ビルドツールを使わない方法
 
-Preact is packaged to be used directly in the browser, and doesn't require any build or tools:
+Preactはビルドやツール無しでブラウザで直に使うためのパッケージを提供しています。
 
 ```html
 <script type="module">
@@ -30,15 +30,19 @@ Preact is packaged to be used directly in the browser, and doesn't require any b
 </script>
 ```
 
-[🔨 Edit on Glitch](https://glitch.com/~preact-no-build-tools)
+[🔨 Glitch上で編集する](https://glitch.com/~preact-no-build-tools)
 
-The primary drawback of developing this way is the lack of JSX, which requires a build step. An ergonomic and performant alternative to JSX is documented in the next section.
+この方法の主な利点はJSXを使わないのでビルドステップが必要ないことです。
+しかし、直に`h`や`createElement`を呼び出しを書くことは書きにくいかもしれません。
+JSXはHTMLと見た目が似ているので多くの開発者にとって理解することが容易であるという利点があります。
+JSXはビルドステップを必要とします。だから、それの代わりに[HTM][htm]を使うことを強く勧めます。
 
-### Alternatives to JSX
+### HTM
 
-Writing raw `h` or `createElement` calls can be tedious. JSX has the advantage of looking similar to HTML, which makes it easier to understand for many developers in our experience. JSX requires a build step though, so we highly recommend an alternative called [HTM][htm].
-
-[HTM][htm] is a JSX-like syntax that works in standard JavaScript. Instead of requiring a build step, it uses JavaScript's own [Tagged Templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates) syntax, which was added in 2015 and is supported in [all modern browsers](https://caniuse.com/#feat=template-literals). This is an increasingly popular way to write Preact apps, since there are fewer moving parts to understand than a traditional front-end build tooling setup.
+[HTM][htm]は標準的なJavaScriptで動作するJSXに似た構文で記述します。
+HTMはビルドステップの代わりにJavaScriptの[Tagged Templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)を使います。
+`Tagged Templates`はES2015で追加され、すべての[モダンブラウザ](https://caniuse.com/#feat=template-literals)でサポートされています。
+HTMは今までのフロントエンドのビルドツールよりシンプルで学習コストが低いのでPreactアプリケーションを実装する方法として採用が拡大中です。
 
 ```html
 <script type="module">
@@ -53,66 +57,76 @@ Writing raw `h` or `createElement` calls can be tedious. JSX has the advantage o
 </script>
 ```
 
-[🔨 Edit on Glitch](https://glitch.com/~preact-with-htm)
+[🔨 Glitch上で編集する](https://glitch.com/~preact-with-htm)
 
-For more information on HTM, check out its [documentation][htm].
+HTMについて詳しく知りたい場合はHTMの[ドキュメント][htm]をチェックしてください。
 
-## Best practices powered by Preact CLI
+## Preact CLIを使ったお勧めの方法
 
-[Preact CLI] is an off-the-shelf solution for building Preact applications that is optimized for modern web development. It's built on standard tooling projects like Webpack, Babel and PostCSS. Preact CLI does not require any configuration or prior knowledge to get started, and this simplicity makes it the most popular way to use Preact.
-
-As the name implies, Preact CLI is a **c**ommand-**li**ne tool that can be run in the terminal on your machine. Install it globally by running:
+[Preact CLI]は最新のウェブ開発に最適化されたPreactアプリケーションのビルドをするためのすぐに使うことができるソリューションです。
+それはwebpack、BabelそしてPostCSSのような標準的なツールを基にしてできています。
+Preact CLIを使い始めるのに何らかの設定や事前の知識は必要ありません。このシンプルさからPreactを使用する最も一般的な方法になっています。
+その名前の通り、Preact CLIは **c**ommand-**li**ne のツールでターミナルで動作します。
+インストールは以下のようにしてグローバルにインストールします。
 
 ```bash
 npm install -g preact-cli
 ```
 
-After that you'll have a new command in your terminal called `preact`. With it you can create a new application by running the `preact create` command:
+その後、ターミナルに`preact`コマンドが新しく加えられます。
+これで`preact create`コマンドを使って新しいアプリケーションを作成することができます。
 
 ```bash
 preact create default my-project
 ```
 
-This will create a new application based on our [default template](https://github.com/preactjs-templates/default). You will be asked for some information about your project, which will then be generated in the directory you specified (`my-project` in this case).
+上記のコマンドは[default template](https://github.com/preactjs-templates/default)をベースに新しいアプリケーションを作成します。
+コマンドを入力して表示された選択肢の中からプロジェクトの要件にあった物を選択します。
+すると指定したディレクトリ(この場合`my-project`)にアプリケーションが生成されます。
 
-> **Tip:** Any GitHub repository with a `template/` folder can be used as a custom template:
+> **Tip:** テンプレートフォルダーがあるGithubレポジトリはカスタムテンプレートとして利用することができます。
 >
 > `preact create <username>/<repository> <project-name>`
 
-### Getting ready for development
+### 開発の準備
 
-Now we're ready to start our application. To start a development server, run the following command inside your newly generated project folder (`my-project` from above):
+これで、アプリケーションを開始する準備ができました。
+生成したプロジェクトフォルダ(上記の`my-project`)で以下のコマンドを実行して開発サーバを起動します。
 
 ```bash
-# Go into the generated project folder
+# 生成したプロジェクトフォルダに移動
 cd my-project
 
-# Start a development server
-npm start
+# 開発サーバを起動
+npm run dev
 ```
 
-Once the server has started, it will print a local development URL to open in your browser.
-Now you're ready to start coding your app!
+サーバが起動するとブラウザで開いて確認するための開発用のローカルのURLが表示されます。
+これで、アプリケーションを開発する準備ができました。
 
-### Making a production build
+### Production用のビルド
 
-There comes a time when you need to deploy your app somewhere. The CLI ships with a handy `build` command which will generate a highly optimized production build.
+CLIは高度に最適化されたプロダクションビルドを行う`build`コマンドを用意しています。
 
 ```bash
 npm run build
 ```
 
-Upon completion you'll have a new `build/` folder which can be deployed directly to a server.
+ビルドが完了すると直接サーバにデプロイできる`build/`フォルダが生成されます。
 
-> For a full list of all available commands check out the [Preact CLI Documentation](https://github.com/preactjs/preact-cli#cli-options).
+> Preact CLIのコマンドについて詳しく知りたい場合は[Preact CLI Documentation](https://github.com/preactjs/preact-cli#cli-options)を確認してください。
 
-## Integrating Into An Existing Pipeline
+## 既存のビルドシステムとの統合
 
-If you already have an existing tooling pipeline set up, it's very likely that this includes a bundler. The most popular choices are [webpack](https://webpack.js.org/), [rollup](https://rollupjs.org) or [parcel](https://parceljs.org/). Preact works out of the box with all of them. No changes needed!
+既にビルドシステムが存在いる場合、バンドラが含まれている可能性が高いです。
+大多数の人はバンドラに[webpack](https://webpack.js.org/)、 [rollup](https://rollupjs.org)もしくは[parcel](https://parceljs.org/)を使っています。
+Preactはそれらをすぐに使うことができます。変更は必要ありません。
 
-### Setting up JSX
+### JSXの設定
 
-To transpile JSX you need a babel plugin that converts it to valid JavaScript code. The one we all use is [@babel/plugin-transform-react-jsx](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx). Once installed you need to specify the function for JSX that should be used:
+JSXをJavaScriptに変換するためにBabelプラグインを使用する必要があります。
+一般的には[@babel/plugin-transform-react-jsx](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)が使われています。
+インストール後、必要なJSXの機能を設定します。
 
 ```json
 {
@@ -125,17 +139,19 @@ To transpile JSX you need a babel plugin that converts it to valid JavaScript co
 }
 ```
 
-> [babeljs](https://babeljs.io/) has some of the best documentation out there. We highly recommend checking it out for questions surrounding babel and how to set it up.
+> Babelの素晴らしいドキュメントが[こちら](https://babeljs.io/)にあります。Babelに関する質問と設定方法についてはこちらを確認することをお勧めします。
 
-### Aliasing React to Preact
+### ReactをPreactにエイリアスする
 
-At some point you'll probably want to make use of the vast react ecosystem. Libraries and Components originally written for React work seamlessly with our compatibility layer. To make use of it we need to point all `react` and `react-dom` imports to Preact. This step is called aliasing.
+Reactの広大なエコシステムを利用したいと思うことがあるでしょう。
+元々React用に書かれているライブラリやコンポーネントでも互換レイヤとシームレスに連携します。
+これを利用するにはすべての`react`と`react-dom`のインポートをPreactへ向ける必要があります。
+このことを`エイリアスする`と言います。
 
-#### Aliasing in webpack
+#### webpackでエイリアスする
 
-To alias any package in webpack you need to add the `resolve.alias` section
-to your config. Depending on the configuration you're using this section may
-already be present, but missing the aliases for Preact.
+webpackでエイリアスするには`resolve.alias`セクションを設定に追加する必要があります。
+使用している設定では既にこのセクションが有るかもしれませんがPreact用のエイリアスがありません。
 
 ```js
 const config = { 
@@ -151,10 +167,9 @@ const config = {
 }
 ```
 
-#### Aliasing in parcel
+#### Parcelでエイリアスする
 
-Parcel uses the standard `package.json` file to read configuration options under
-an `alias` key.
+Percelでは`package.json`に以下のような`alias`キーを追加します。
 
 ```json
 {
@@ -166,11 +181,11 @@ an `alias` key.
 }
 ```
 
-#### Aliasing in jest
+#### Jestでエイリアスする
 
-Similar to bundlers, [jest](https://jestjs.io/) allows to rewrite module paths. The syntax is a bit
-different, than in say webpack, because it's based on regex. Add this to your
-jest configuration:
+バンドラと同様に[Jest](https://jestjs.io/)もモジュールのパスを書き換えることができます。
+シンタックスが正規表現に基づいているためwebpackとは少し違います。
+以下をJestの設定に加えてください。
 
 ```json
 {
