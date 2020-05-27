@@ -1,17 +1,22 @@
 ---
-name: Hooks
-description: 'Hooks in Preact allow you to compose behaviours together and re-use that logic in different components.'
+name: フック
+description: 'フックは処理を組み合わせて処理を作ることや異なるコンポーネントでその処理を使い回すことを可能にします。'
 ---
 
-# Hooks
+# フック
 
-Hooks is a new concept that allows you to compose state and side effects. They allow you to reuse stateful logic between components.
+フックはステートと副作用を取り扱う新しいコンセプトです。それはコンポーネント間でステートを扱う処理を使い回すことを可能にします。
 
-If you've worked with Preact for a while, you may be familiar with patterns like "render props" and "higher order components" that try to solve these challenges. These solutions have tended to make code harder to follow and more abstract. The hooks API makes it possible to neatly extract the logic for state and side effects, and also simplifies unit testing that logic independently from the components that rely on it.
+Preactをそれなりに使ったことがある人なら、これらの課題を解決する"reander props"や"higher order components"のようなパターンをよく知っているかもしれません。
+しかし、これらの解決策はコードの可読性を下げて、より抽象的にする傾向がありました。
+フックAPIを使うとステートや副作用に関する処理をきれいに切り出すことができます。
+そして、その処理に依存しているコンポーネントとは別に、その処理のみを対象とした単体テストを記述することができます。これによってテストをシンプルにすることができます。
 
-Hooks can be used in any component, and avoid many pitfalls of the `this` keyword relied on by the class components API. Instead of accessing properties from the component instance, hooks rely on closures. This makes them value-bound and eliminates a number of stale data problems that can occur when dealing with asynchronous state updates.
+フックはすべてのコンポーネントで使用することができます。そして、クラスコンポーネントが依存する`this`キーワードの多くの落とし穴を回避することができます。
+コンポーネントのインスタンスのプロパティにアクセスする代わりに、フックはクロージャを使います。
+これによってフックは値を束縛します。そして、非同期でのステートの更新を扱う際に発生するいくつかの古いデータの問題を解決します。
 
-There are two ways to import hooks: from `preact/hooks` or `preact/compat`.
+フックをインポートする方法は2通りあります。`preact/hooks`からインポートする方法と`preact/compat`からインストールする方法です。
 
 ---
 
@@ -19,11 +24,11 @@ There are two ways to import hooks: from `preact/hooks` or `preact/compat`.
 
 ---
 
-## Introduction
+## イントロダクション
 
-The easiest way to understand hooks is to compare them to equivalent class-based Components.
+フックを理解する最もわかりやすい方法は同等のクラスコンポーネントと比較することです。
 
-We'll use a simple counter component as our example, which renders a number and a button that increases it by one:
+例として数字と数を増加するためのボタンを持つシンプルなカウンターコンポーネントを見ていきましょう。
 
 ```jsx
 class Counter extends Component {
@@ -46,7 +51,7 @@ class Counter extends Component {
 }
 ```
 
-Now, here's an equivalent function component built with hooks:
+上記のクラスコンポーネントと同等の機能をフックを使って関数コンポーネントで実装すると以下のようになります。
 
 ```jsx
 function Counter() {
@@ -64,9 +69,9 @@ function Counter() {
 }
 ```
 
-At this point they seem pretty similar, however we can further simplify the hooks version.
+この時点で両者はかなり似ているように見えます。フックの方は更にシンプルにすることができます。
 
-Let's extract the counter logic into a custom hook, making it easily reusable across components:
+カウンター処理をカスタムフックに切り出して、コンポーネント間で簡単に使い回せるようにしましょう。
 
 ```jsx
 function useCounter() {
@@ -77,7 +82,7 @@ function useCounter() {
   return { value, increment };
 }
 
-// First counter
+// 1つ目のカウンター
 function CounterA() {
   const { value, increment } = useCounter();
   return (
@@ -88,7 +93,7 @@ function CounterA() {
   );
 }
 
-// Second counter which renders a different output.
+// 異なるアウトプットをレンダリングする2つ目のカウンター
 function CounterB() {
   const { value, increment } = useCounter();
   return (
@@ -101,51 +106,52 @@ function CounterB() {
 }
 ```
 
-Note that both `CounterA` and `CounterB` are completely independent of each other. They both use the `useCounter()` custom hook, but each has its own instance of that hook's associated state.
+`CounterA`と`CounterB`はお互いに完全に独立していることに注目してください。
+両者とも`useCounter()`カスタムフックを使っています。しかし、`useCounter()`フックが返したステートはコンポーネント間で独立しています。
 
-> Thinking this looks a strange? You're not alone!
+> 違和感をかんじますか。みんな最初はそうです。
 >
-> It took many of us a while to grow accustomed to this approach.
+> みんなこのやり方に慣れるのに時間がかかりました。
 
-## The dependency argument
+## 変更を検知するための引数
 
-Many hooks accept an argument that can be used to limit when a hook should be updated. Preact inspects each value in a dependency array and checks to see if it has changed since the last time a hook was called.
+多くのフックは適切なタイミングでフックを更新するための判断をするための引数を必要とします。
+その引数は配列です。Preactはフックのその引数の各値を検査し、フックが最後に実行された時のそれと同じかどうかチェックします。
 
-In our `useCounter()` implementation above, we passed an array of dependencies to `useCallback()`:
+例として、上記の`useCounter()`では`useCallback()`に更新を判断するための引数を渡しています。
 
 ```jsx
 function useCounter() {
   const [value, setValue] = useState(0);
   const increment = useCallback(() => {
     setValue(value + 1);
-  }, [value]);  // <-- the dependency array
+  }, [value]);  // <-- 変更を検知するための引数
   return { value, increment };
 }
 ```
 
-Passing `value` here causes `useCallback` to return a new function reference whenever `value` changes.
-This is necessary in order to avoid "stale closures", where the callback would always reference the first render's `value` variable from when it was created, causing `increment` to always set a value of `1`.
+この例では`value`を配列に入れて`useCallback()`に渡しています。そして、`value`の値が変化すると`useCallback()`は新しい関数に対する参照を返します。
+これは"stale closures"を避けるために必要です。"stable closures"では、この例では`increment`は最初にレンダリングされた時からずっと同じ`value`変数の値(この例では`0`)を参照し続けます。そのため`increment`は常に`1`をステートにセットし続けます。
 
-> This creates a new `increment` callback every time `value` changes.
-> For performance reasons, it's often better to use a [callback](#usestate) to update state values rather than retaining the current value using dependencies.
+> `value`が変更する度、新しい`increment`が生成されます。
+> パフォーマンス上の理由でステートの管理には`useCallback()`の第2引数の配列を使うのではなく[useState()](#usestate)を使うべきです。
 
-## Stateful hooks
+## ステートを扱うフック
 
-Here we'll see how we can introduce stateful logic into functional components.
+ここではステートを扱う処理を関数型コンポーネントに実装する方法を説明します。
 
-Prior to the introduction of hooks, class components were required anywhere state was needed.
+フックが登場する前、クラスコンポーネントはステートが必要な場面で常に使われていました。
 
 ### useState
 
-This hook accepts an argument, this will be the initial state. When
-invoking this hook returns an array of two variables. The first being
-the current state and the second one being the setter for our state.
+`useState`フックは引数を1つ取ります。これが最初のステートになります。
+このフックが実行されると、2つの要素を持つ配列を返します。
+配列の最初の要素は現在のステートです。配列の2番目の要素はステートをセットするセッター関数です。
 
-Our setter behaves similar to the setter of our classic state.
-It accepts a value or a function with the currentState as argument.
+このセッター関数はステートの古典的なセッター関数と似ています。
+このセッター関数はは1つの値もしくは現在のステートを引数として受け取る関数を引数とします。
 
-When you call the setter and the state is different, it will trigger
-a rerender starting from the component where that useState has been used.
+セッター関数を実行してステートが変更されてた場合、`useState`を実行しているコンポーネントの再レンダリングが開始されます。
 
 ```jsx
 import { h } from 'preact';
@@ -154,7 +160,7 @@ import { useState } from 'preact/hooks';
 const Counter = () => {
   const [count, setCount] = useState(0);
   const increment = () => setCount(count + 1);
-  // You can also pass a callback to the setter
+  // 以下のようにセッター関数に関数を渡すことができます。
   const decrement = () => setCount((currentCount) => currentCount - 1);
 
   return (
@@ -167,11 +173,12 @@ const Counter = () => {
 }
 ```
 
-> When our initial state is expensive it's better to pass a function instead of a value.
+> 最初のステートの生成コストが高い場合はセッター関数に値ではなく関数を渡したほうが良いです。
 
 ### useReducer
 
-The `useReducer` hook has a close resemblance to [redux](https://redux.js.org/). Compared to [useState](#usestateinitialstate) it's easier to use when you have complex state logic where the next state depends on the previous one.
+`useReducer`フックは[redux](https://redux.js.org/)とよく似ています。
+`useReducer`は[useState](#usestate)を使う場合と比べて次のステートが1つ前のステートに依存するような複雑なステートの処理を簡単にします。
 
 ```jsx
 const initialState = 0;
@@ -199,28 +206,29 @@ function Counter() {
 }
 ```
 
-## Memoization
+## メモ化
 
-In UI programming there is often some state or result that's expensive to calculate. Memoization can cache the results of that calculation allowing it to be reused when the same input is used.
+UIプログラミングではステートやレンダリング結果の計算コストが高いことがよくあります。
+メモ化は計算結果をキャッシュして同じ入力の場合はそれを再利用します。
 
 ### useMemo
 
-With the `useMemo` hook we can memoize the results of that computation and only recalculate it when one of the dependencies changes.
+`useMemo`フックは計算結果をメモ化します。そして、計算が依存する値が変更された場合のみ再計算されます。
 
 ```jsx
 const memoized = useMemo(
   () => expensive(a, b),
-  // Only re-run the expensive function when any of these
-  // dependencies change
+  // 上記の関数は変更を検知するための変数が変わった場合のみ実行されます。
   [a, b]
 );
 ```
 
-> Don't run any effectful code inside `useMemo`. Side-effects belong in `useEffect`.
+> `useMemo`内で副作用のある処理を実行しないでください。副作用のある処理は`useEffect`が担当します。
 
 ### useCallback
 
-The `useCallback` hook can be used to ensure that the returned function will remain referentially equal for as long as no dependencies have changed. This can be used to optimize updates of child components when they rely on referential equality to skip updates (e.g. `shouldComponentUpdate`).
+`useCallback`フックは変更を検知する引数が変更されていない限り１つ前の呼び出しで返した関数と参照的に等しい関数を返します。
+これは子コンポーネントが参照的に等しいかで更新するかしないかを判断している場合(例: `shouldComponentUpdate`)、子コンポーネントの更新の最適化に役立ちます。
 
 ```jsx
 const onClick = useCallback(
@@ -229,15 +237,16 @@ const onClick = useCallback(
 );
 ```
 
-> Fun fact: `useCallback(fn, deps)` is equivalent to `useMemo(() => fn, deps)`.
+> `useCallback(fn, deps)`は`useMemo(() => fn, deps)`と同じです。
 
 ## useRef
 
-To get a reference to a DOM node inside a functional components there is the `useRef` hook. It works similar to [createRef](/guide/v10/refs#createrefs).
+関数コンポーネント内のDOMコンポーネントへの参照を取得するには`useRef`フックを使います。
+これは[createRef](/guide/v10/refs#createrefs)と似た動作をします。
 
 ```jsx
 function Foo() {
-  // Initialize useRef with an initial value of `null`
+  // `null`を渡すことによってuseRefを初期化します。
   const input = useRef(null);
   const onClick = () => input.current && input.current.focus();
 
@@ -250,11 +259,12 @@ function Foo() {
 }
 ```
 
-> Be careful not to confuse `useRef` with `createRef`.
+> `useRef`と`createRef`を混同しないように注意してください。
 
 ## useContext
 
-To access context in a functional component we can use the `useContext` hook, without any higher-order or wrapper components. The first argument must be the context object that's created from a `createContext` call.
+関数コンポーネントでHigh-Orderコンポーネントやラッパーコンポーネントを使わずにコンテキストを扱うには`useContext`を使用します。
+`useContext`の第1引数は`createContext`によって生成されたコンテキストオブジェクトである必要があります。
 
 ```jsx
 const Theme = createContext('light');
@@ -276,24 +286,27 @@ function App() {
 }
 ```
 
-## Side-Effects
+## 副作用
 
-Side-Effects are at the heart of many modern Apps. Whether you want to fetch some data from an API or trigger an effect on the document, you'll find that the `useEffect` fits nearly all your needs. It's one of the main advantages of the hooks API, that it reshapes your mind into thinking in effects instead of a component's lifecycle.
+副作用は最新のアプリケーションの根幹を成しています。
+APIからデータをフェッチしたりドキュメントに変更を加えるような副作用を伴う処理を実行したい場合には`useEffect`を使うことが適切です。
+`useEffect`の主な利点の1つはコンポーネントのライフサイクルではなく副作用の内容に意識を向けるようになることです。
 
 ### useEffect
 
-As the name implies, `useEffect` is the main way to trigger various side-effects. You can even return a cleanup function from your effect one if needed.
+その名の通り副作用を伴う処理にはほとんどの場合に`useEffect`を使います。
+以下のように必要に応じて副作用を伴う処理を記述した後にクリーンアップ処理を実行するための関数を返します。
 
 ```jsx
 useEffect(() => {
-  // Trigger your effect
+  // ここに副作用を伴う処理を書く
   return () => {
-    // Optional: Any cleanup code
+    // 必要にならクリーンアップ処理を行う関数を返す。
   };
 }, []);
 ```
 
-We'll start with a `Title` component which should reflect the title to the document, so that we can see it in the address bar of our tab in our browser.
+`document.title`を変更することでブラウザのタブに表示されるタイトルを変更する`Title`コンポーネントを作ることから初めてみましょう。
 
 ```jsx
 function PageTitle(props) {
@@ -305,12 +318,19 @@ function PageTitle(props) {
 }
 ```
 
-The first argument to `useEffect` is an argument-less callback that triggers the effect. In our case we only want to trigger it, when the title really has changed. There'd be no point in updating it when it stayed the same. That's why we're using the second argument to specify our [dependency-array](#the-dependency-argument).
+`useEffect`の第1引数は副作用を伴う処理を実行する引数を取らないコールバック関数です。
+この例では`props.title`が変更された場合のみコールバック関数は実行されます。
+`props.title`が前回実行した時と同じだった場合、意味がありません。
+だから、`useEffect`は第2引数に変更を検知するための引数を取ります。
+コールバック関数はコンポーネントがブラウザに表示された後に実行されます。
 
-But sometimes we have a more complex use case. Think of a component which needs to subscribe to some data when it mounts and needs to unsubscribe when it unmounts. This can be accomplished with `useEffect` too. To run any cleanup code we just need to return a function in our callback.
+時には、もっと複雑なユースケースもあります。
+マウント時にデータをサブスクラブしアンマウント時にアンスクライブするコンポーネントについて考えてみましょう。
+これも`useEffect`でできます。
+クリーンアップ処理を行うにはコールバックでそれを実行する関数を返します。
 
 ```jsx
-// Component that will always display the current window width
+// コンポーネントは常にウィンドウの幅で表示されます。
 function WindowWidth(props) {
   const [width, setWidth] = useState(0);
 
@@ -327,31 +347,30 @@ function WindowWidth(props) {
 }
 ```
 
-> The cleanup function is optional. If you don't need to run any cleanup code, you don't need to return anything in the callback that's passed to `useEffect`.
+> クリーンアップ関数はオプションです。クリーンアップ処理が必要ない場合、`useEffect`に渡したコールバックは何も返す必要はありません。
 
 ### useLayoutEffect
 
-The signature is identical to [useEffect](#useeffect), but it will fire as soon as the component is diffed and the browser has a chance to paint.
+使い方は[useEffect](#useeffect)と同じですが、`useLayoutEffect`のコールバック関数はコンポーネントのDOMの変更とブラウザでの表示の間に実行されます。
 
 ### useErrorBoundary
 
-Whenever a child component throws an error you can use this hook to catch it and display a custom error UI to the user.
+`useErrorBoundary`フックを使うと子コンポーネントで発生したエラーを捕捉するすることができます。
 
 ```jsx
-// error = The error that was caught or `undefined` if nothing errored.
-// resetError = Call this function to mark an error as resolved. It's
-//   up to your app to decide what that means and if it is possible
-//   to recover from errors.
+// `error`はエラーが発生した場合は補足したエラーになります。エラーが発生しなかった場合は`undefined`になります。
+// `resetError`を実行するとエラーは解決したことになります。
 const [error, resetError] = useErrorBoundary();
 ```
 
-For monitoring purposes it's often incredibly useful to notify a service of any errors. For that we can leverage an optional callback and pass that as the first argument to `useErrorBoundary`.
+サービスのエラーを通知することはモニタリングに役立ちます。
+そのために`useErrorBoundary`の第1引数にオプションのコールバック関数を渡すことができます。
 
 ```jsx
 const [error] = useErrorBoundary(error => callMyApi(error.message));
 ```
 
-A full usage example may look like this:
+完全な使用例は以下です。
 
 ```jsx
 const App = props => {
@@ -373,5 +392,5 @@ const App = props => {
 };
 ```
 
-> If you've been using the class based component API in the past, then this hook is essentially an alternative to the [componentDidCatch](https://preactjs.com/guide/v10/whats-new/#componentdidcatch) lifecycle method.
-> This hook is was introduced with Preact 10.2.0 .
+> クラスコンポーネントでは[componentDidCatch](https://preactjs.com/guide/v10/whats-new/#componentdidcatch)がこのフックに該当します。
+> このフックはPreact 10.2.0で導入されました。
