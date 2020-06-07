@@ -1,15 +1,18 @@
 ---
-name: Options
-description: 'Preact has several option hooks that allow you to attach callbacks to various stages of the diffing process.'
+name: オプションフック
+description: 'Preactにはいつくかのオプションフックがあります。それらを使うと差分処理の各段階で実行されるコールバック関数をセットすることができます。'
 ---
 
-# Renderer Options
+# オプションフック
 
-Callbacks for plugins that can change Preact's rendering.
+レンダーオプションはPreactのレンダリングを変更させるプラグインのためのコールバック機構です。
 
-Preact supports a number of different callbacks that can be used to observe or change each stage of the renderering process, commonly referred to as "Option Hooks" (not to be confused with [hooks](https://preactjs.com/guide/v10/hooks)). These are frequently used to extend the featureset of Preact itself, or to create specialized testing tools. All of our addons like `preact/hooks`, `preact/compat` and our devtools extension are based on these callbacks.
+Preactはレンダリングプロセスの各段階での状態を観察または変更するためのコールバック関数を設定することができます。
+それらのコールバック関数は一般的にオプションフックと呼ばれます([フック](https://preactjs.com/guide/v10/hooks)と混同しないよう注意してください。)。
+それらはPreactの機能を拡張したりPreact向けのテストツールを作成することに使われます。
+`preact/hooks`、`preact/compat`、`devtools`はオプションフックを使っています。
 
-This API is primarily intended for tooling or library authors who wish to extend Preact.
+このAPIはPreact向けのツールやPreactを拡張するライブラリの開発者向けです。
 
 ---
 
@@ -17,77 +20,84 @@ This API is primarily intended for tooling or library authors who wish to extend
 
 ---
 
-## Versioning and Support
+## バージョン管理とサポート
 
-Option Hooks are shipped in Preact, and as such are semantically versioned. However, they do not have the same deprecation policy, which means major versions can change the API without an extended announcement period leading up to release. This is also true for the structure of internal APIs exposed through Options Hooks, like `VNode` objects.
+オプションフックは`preact`パッケージに含まれています。そして、それはマンティックバージョンで管理されています
+しかし、オプションフックはセマンティックバージョンとは関係なく変更される可能性があります。
+これは`VNode`オブジェクトのようにオプションフックで扱う内部APIの構造にも当てはまります。
 
-## Setting Option Hooks
+## オプションフックを設定する
 
-You can set Options Hooks in Preact by modifying the exported `options` object.
+オプションフックはエキスポートされた`options`オブジェクトを変更して設定します。
 
-When defining a hook, always make sure to call a previously defined hook of that name if there was one. Without this, the callchain will be broken and code that depends on the previously-installed hook will break, resulting in addons like `preact/hooks` or DevTools ceasing to work. Make sure to pass the same arguments to the original hook, too - unless you have a specific reason to change them.
+オプションフックを設定する場合は必ず既存のオプションフックを新しいオプションフック内で実行するように設定してください。
+これをしないとコールチェーンが壊れます。そして既存のオプションフックに依存しているコードは正常に動作しません。その結果、`preact/hooks`やDevToolsのようなアドオンは正常に動作しなくなります。
+変更する特別な理由がない限り既存のオプションフックにも同じ引数を渡してください。
 
 ```js
 import { options } from 'preact';
 
-// Store previous hook
+// 既存のvnodeオプションフックを保存する
 const oldHook = options.vnode;
 
-// Set our own options hook
+// vnodeオプションフックを設定する
 options.vnode = vnode => {
   console.log("Hey I'm a vnode", vnode);
 
-  // Call previously defined hook if there was any
+  // 既存のオプションフックが存在している場合、それを実行する
   if (oldHook) {
     oldHook(vnode);
   }
 }
 ```
 
-None of the currently available hooks have return values, so handling return values from the original hook is not necessary.
+eventオプションフック以外のオプションフックは戻り値を返しません。それらは戻り値を気にする必要はありません。
 
-## Available Option Hooks
+## 利用可能なオプションフック
 
 #### `options.vnode`
 
-**Signature:** `(vnode: VNode) => void`
+**API:** `(vnode: VNode) => void`
 
-The most common Options Hook, `vnode` is invoked whenever a VNode object is created. VNodes are Preact's representation of Virtual DOM elements, commonly thought of as "JSX Elements".
+最も一般的なオプションフックです。
+`vnode`オプションフックはVNodeオブジェクトが生成されるたびに実行されます。
+VNodeはPreactの仮想DOM要素を表します。それはJSX要素と呼ばれることもあります。
 
 #### `options.unmount`
 
-**Signature:** `(vnode: VNode) => void`
+**API:** `(vnode: VNode) => void`
 
-Invoked immediately before a vnode is unmounted, when its DOM representation is still attached.
+vnodeがアンマウントされる直前(DOMが存在している時)に実行されます。
 
 #### `options.diffed`
 
-**Signature:** `(vnode: VNode) => void`
+**API:** `(vnode: VNode) => void`
 
-Invoked immediately after a vnode is rendered, once its DOM representation is constructed or transformed into the correct state.
+vnodeがレンダリングされた直後に実行されます。
 
 #### `options.event`
 
-**Signature:** `(event: Event) => any`
+**API:** `(event: Event) => any`
 
-Invoked just before a DOM event is handled by its associated Virtual DOM listener. When `options.event` is setted, the event which is event listener argument is replaced return value of `options.event`.
+DOMイベントが関連する仮想DOMのイベントリスナに渡される直前に実行されます。
+`options.event`が設定されている場合、イベントリスナの引数の`event`は`options.event`の戻り値に置き換えられます。
 
 #### `options.requestAnimationFrame`
 
-**Signature:** `(callback: () => void) => void`
+**API:** `(callback: () => void) => void`
 
-Controls the scheduling of effects and effect-based based functionality in `preat/hooks`.
+`preact/hooks`内の副作用と副作用ベースの処理のスケジューリングを行う関数を設定します。
 
 #### `options.debounceRendering`
 
-**Signature:** `(callback: () => void) => void`
+**API:** `(callback: () => void) => void`
 
-A timing "deferral" function that is used to batch processing of updates in the global component rendering queue.
+コンポーネントがレンダリングされる処理を遅延させる処理を行う関数を設定します。
 
-By default, Preact uses a Microtask tick via `Promise.resolve()`, or `setTimeout` when Promise is not available.
+`options.debounceRendering`はデフォルトでは`Promise.resolve()`を遅延処理に使います。Promiseが使えない場合は`setTimeout`を使います。
 
 #### `options.useDebugValue`
 
-**Signature:** `(value: string | number) => void`
+**API:** `(value: string | number) => void`
 
-Called when the `useDebugValue` hook in `preact/hooks` is called.
+`useDebugValue`フックが実行された時に実行されます。

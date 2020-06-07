@@ -226,7 +226,7 @@ render(
     <p>
         Reactの経験の有無に応じてガイドを別けています。
         <br>
-        最適なガイドを選びましょう。
+        あなたに合ったガイドを選びましょう。
     </p>
     <p>
         <a href="/guide/v10/getting-started" class="btn primary">はじめに</a>
