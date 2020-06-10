@@ -1,12 +1,14 @@
 ---
 name: Progressive Web Apps
 permalink: '/guide/progressive-web-apps'
-description: 'Progressive Web Apps (PWA) allow you to ship your app offline. They work pretty well with Preact'
+description: 'Progressive Web Apps (PWA)はアプリケーションをオフラインで動作させることができます。PreactはPWAの開発に非常に適しています。'
 ---
 
 # Progressive Web Apps
 
-Preact is an excellent choice for [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/) that wish to load and become interactive quickly.  [Preact CLI](https://github.com/preactjs/preact-cli/) codifies this into an instant build tool that gives you a PWA with a 100 [Lighthouse][LH] score right out of the box.
+Preactはすぐにロードされ操作が可能になることを求められる[Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)に向いています。
+[Preact CLI](https://github.com/preactjs/preact-cli/)は100[Lighthouse][LH]スコアを獲得するPWAを提供する即席のビルドツールをデフォルトで提供します。
+
 
 [LH]: https://developers.google.com/web/tools/lighthouse/
 
@@ -17,9 +19,14 @@ Preact is an excellent choice for [Progressive Web Apps](https://developers.goog
         </div>
         <div class="list-detail">
           <div class="_title-block">
-            <h3>Loads less script</h3>
+            <h3>ロードするスクリプトが小さい</h3>
           </div>
-          <p class="_summary">Preact's <a href="/about/project-goals">small size</a> is valuable when you have a tight loading performance budget. On average mobile hardware, loading large bundles of JS leads to longer load, parse and eval times. This can leave users waiting a long time before they can interact with your app.  By trimming down the library code in your bundles, you load quicker by shipping less code to your users. </p>
+          <p class="_summary">
+	    パフォーマンスバジェットに余裕がない時、<a href="/about/project-goals">Preactの小さいサイズ</a>は価値があります。
+	    平均的なモバイルハードウェアでは大きなサイズのJSのバンドルをロードするとロード、パース、評価に長い時間がかかるようになります。
+	    これはユーザがアプリケーションを操作可能になるまで長い時間待たせてしまう可能性があります。
+	    バンドル内のライブラリのコードを削減することによって、ユーザがロードするコードを小さくすることができます。これによって、ロード時間が短くなります。
+	  </p>
         </div>
     </li>
     <li class="list-item">
@@ -28,9 +35,13 @@ Preact is an excellent choice for [Progressive Web Apps](https://developers.goog
         </div>
         <div class="list-detail">
           <div class="_title-block">
-            <h3>Faster time to interactivity</h3>
+            <h3>操作可能になるまでの時間が短い</h3>
           </div>
-          <p class="_summary">If you're aiming to be <a href="https://infrequently.org/2016/09/what-exactly-makes-something-a-progressive-web-app/">interactive in under 5s</a>, every KB matters. <a href="/guide/switching-to-preact">Switching React for Preact</a> in your projects can shave multiple KBs off and enable you to get interactive in one RTT. This makes it a great fit for Progressive Web Apps trying to trim down as much code as possible for each route.</p>
+          <p class="_summary">
+	    <a href="https://infrequently.org/2016/09/what-exactly-makes-something-a-progressive-web-app/">5秒以内で操作可能な状態</a>にするにはKB単位で注意する必要があります。
+	    <a href="/guide/switching-to-preact">ReactからPreactに移行する</a>ことで数KB削減することができます。そして1回のラウンドトリップタイム(RTT)で操作可能にすることができます。
+	    これは各ページで可能な限り容量を削減しようとしているProgressive Web Appsに適しています。
+	  </p>
         </div>
     </li>
     <li class="list-item">
@@ -39,24 +50,29 @@ Preact is an excellent choice for [Progressive Web Apps](https://developers.goog
         </div>
         <div class="list-detail">
           <div class="_title-block">
-            <h3>A building block that works great with the React ecosystem</h3>
+            <h3>Reactのエコシステムとうまく連携することが可能</h3>
           </div>
-          <p class="_summary">Whether you need to use React's <a href="https://facebook.github.io/react/docs/react-dom-server.html">server-side rendering</a> to get pixels on the screen quickly or use <a href="https://github.com/ReactTraining/react-router">React Router</a> for navigation, Preact works well with many libraries in the ecosystem. </p>
+          <p class="_summary">
+	    Reactの<a href="https://facebook.github.io/react/docs/react-dom-server.html">サーバーサイドレンダリング</a>を使って高速に表示する必要がある場合でも<a href="https://github.com/ReactTraining/react-router">React Router</a>を使ってナビゲーションする必要がある場合でも、Preactは多くのライブラリとうまく連携します。
+	  </p>
         </div>
     </li>
 </ol>
 
-## This site is a PWA
+## このサイトはPWAです
 
-In fact, the site you're on right now is a Progressive Web App!. Here it is getting interactive in under 5 seconds in a trace from a Nexus 5X over 3G:
+あなたが見ているこのサイトはProgressive Web Appです。
+このサイトは3G回線のNexus 5Xで5秒以内に操作可能になります。
 
-<img src="/assets/pwa-guide/timeline.jpg" alt="A DevTools Timeline trace of the preactjs.com site on a Nexus 5X"/>
+<img src="/assets/pwa-guide/timeline.jpg" alt="A DevTools Timeline trace of the preactjs.com site on a Nexus 5X" style="display: block;" />
 
-Static site content is stored in the (Service Worker) Cache Storage API enabling instant loading on repeat visits.
+静的なサイトのコンテンツは(Service Worker) Cache Storage APIに保存されます。そして、再び訪問した時にすぐにロードされます。
 
-## Performance tips
+## パフォーマンスtips
 
-While Preact is a drop-in that should work well for your PWA, it can also be used with a number of other tools and techniques. These include:
+While Preact is a drop-in that should work well for your PWA, it can also be used with a number of other tools and techniques.
+PreactはPWAにとても適しているだけではなく、それ以外のパフォーマンスを改善するツールやテクニックを使うことができます。
+それらの一部を以下に記述します。
 
 <ol class="list-view">
     <li class="list-item">
@@ -65,6 +81,11 @@ While Preact is a drop-in that should work well for your PWA, it can also be use
         </div>
         <div class="list-detail">
           <p class="_summary"><strong><a href="https://webpack.js.org/guides/code-splitting/">Code-splitting</a></strong> breaks up your code so you only ship what the user needs for a page. Lazy-loading the rest as needed improves page load times. Supported via Webpack.</p>
+          <p class="_summary">
+	    <strong><a href="https://webpack.js.org/guides/code-splitting/">Code-splitting</a></strong>はコードを分割して最初のページを表示するために必要な物のみを提供し、残りは遅延ロードで必要な時にロードします。
+	    これによってロード時間が短くなります。
+	    webpackとRollupでサポートされています。
+	  </p>
         </div>
     </li>
     <li class="list-item">
@@ -72,7 +93,11 @@ While Preact is a drop-in that should work well for your PWA, it can also be use
           <div class="_bubble" style="background-image: url(/assets/pwa-guide/service-worker-caching.svg);"></div>
         </div>
         <div class="list-detail">
-          <p class="_summary"><strong><a href="https://developers.google.com/web/fundamentals/getting-started/primers/service-workers">Service Worker caching</a></strong> allows you to offline cache static and dynamic resources in your app, enabling instant loading and faster interactivity on repeat visits. Accomplish this with <a href="https://github.com/GoogleChrome/sw-precache#wrappers-and-starter-kits">sw-precache</a> or <a href="https://github.com/NekR/offline-plugin">offline-plugin</a>.</p>
+          <p class="_summary">
+	    <strong><a href="https://developers.google.com/web/fundamentals/getting-started/primers/service-workers">Service Workerキャッシング</a></strong>は
+	    アプリケーションの静的なリソースと動的なリソースをオフラインでキャッシュすることを可能にします。その結果、再度サイトを訪れた場合はより早くに操作することができる状態になります。
+	    <a href="https://developers.google.com/web/tools/workbox">Workbox</a>はこれに役立ちます。
+	  </p>
         </div>
     </li>
     <li class="list-item">
@@ -80,7 +105,11 @@ While Preact is a drop-in that should work well for your PWA, it can also be use
           <div class="_bubble" style="background-image: url(/assets/pwa-guide/prpl.svg);"></div>
         </div>
         <div class="list-detail">
-          <p class="_summary"><strong><a href="https://developers.google.com/web/fundamentals/performance/prpl-pattern/">PRPL</a></strong> encourages preemptively pushing or pre-loading assets to the browser, speeding up the load of subsequent pages. It builds on code-splitting and SW caching. </p>
+          <p class="_summary">
+	    <strong><a href="https://developers.google.com/web/fundamentals/performance/prpl-pattern/">PRPL</a></strong>は
+	    ブラウザにアセットを事前にプッシュまたはプレロードするようにして次のページのロードをスピードアップします。
+	    PRPLはcode-splittingとService Workerキャッシングで構築されています。
+	  </p>
         </div>
     </li>
     <li class="list-item">
@@ -88,21 +117,26 @@ While Preact is a drop-in that should work well for your PWA, it can also be use
           <div class="_bubble" style="background-image: url(/assets/pwa-guide/lighthouse.svg);"></div>
         </div>
         <div class="list-detail">
-          <p class="_summary"><strong><a href="https://github.com/GoogleChrome/lighthouse/">Lighthouse</a></strong> allows you to audit the performance and best practices of your Progressive Web App so you know how well your app performs.</p>
+          <p class="_summary">
+	    <strong><a href="https://github.com/GoogleChrome/lighthouse/">Lighthouse</a></strong>はProgressive Web Appのパフォーマンスやベストプラクティスを監査して改善点を示します。
+	  </p>
         </div>
     </li>
 </ol>
 
 ## Preact CLI
 
-[Preact CLI](https://github.com/preactjs/preact-cli/) is the official build tool for Preact projects. It's a single dependency command line tool that bundles your Preact code into a highly optimized Progressive Web App.  It aims to make all of the above recommendations automatic, so you can focus on writing great Components.
+[Preact CLI](https://github.com/preactjs/preact-cli/)はPreactのオフィシャルビルドツールです。
+このコマンドラインツールだけで高度に最適化されたPreact製のProgressive Web Appを作ることできます。
+これは上記の推奨事項をすべて備えたものを自動的に作ります。だから、あなたは良いコンポーネントを書くことに集中できます。
 
-Here are a few things Preact CLI bakes in:
+Preact CLIにあるいくつかの機能を紹介します。
 
-- Automatic, seamless code-splitting for your URL routes
-- Automatically generates and installs a ServiceWorker
-- Generates HTTP2/Push headers (or preload meta tags) based on the URL
-- Pre-rendering for a fast Time To First Paint
-- Conditionally loads polyfills if needed
+- URLルーティングに対する自動的かつシームレスなcode-splitting
+- ServiceWorkerを自動的に生成してインストールする
+- URLに基づいたHTTP2/Push(もしくはプレロードメタタグ)を生成する
+- 最初の表示を高速化するためのPre-rendering
+- 必要に応じてpolyfillをロードする
 
-Since [Preact CLI](https://github.com/preactjs/preact-cli/) is internally powered by [Webpack](https://webpack.js.org), you can define a `preact.config.js` and customize the build process to suit your needs.  Even if you customize things, you still get to take advantage of awesome defaults, and can update as new versions of `preact-cli` are released.
+[Preact CLI](https://github.com/preactjs/preact-cli/)は内部的には[webpack](https://webpack.js.org)を使っています。必要に応じて`preact.config.js`を定義してビルドプロセスをカスタマイズすることができます。
+カスタマイズしても、デフォルトの機能を使うことができます。そして、`preact-cli`の新バージョンがリリースされたとき更新することができます。
