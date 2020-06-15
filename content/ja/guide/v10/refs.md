@@ -94,7 +94,7 @@ class Foo extends Component {
   ref = createRef();
 
   componentDidMount() {
-    // 安全のために: リファレンスがあるかチェックする
+    // 安全のためにリファレンスがあるか確認する
     if (this.ref.current) {
       const dimensions = this.ref.current.getBoundingClientRect();
       this.setState({
