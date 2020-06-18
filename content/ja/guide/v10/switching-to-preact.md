@@ -1,14 +1,16 @@
 ---
-name: Switching to Preact from React
+name: ReactからPreactへの移行
 permalink: '/guide/switching-to-preact'
-description: 'Everything you need to know to switch from React to Preact.'
+description: 'ReactからPreactへの移行するために必要なことをすべて説明します。'
 ---
 
-# Switching to Preact (from React)
+# (Reactから)Preactへの移行
 
-`preact/compat` is our compatibility layer that allows you to leverage the many libraries of the React ecosystem and use them with Preact. This is the recommended way to try out Preact if you have an existing React app.
+`preact/compat`はReactのエコシステムに存在する多くのライブラリをPreactで使用することができるようにする互換レイヤです。既存のReactアプリケーションをPreactに移行する場合はこれを使うことをお勧めします。
 
-This lets you continue writing React/ReactDOM code without any changes to your workflow or codebase. `preact/compat` adds somewhere around 2kb to your bundle size, but has the advantage of supporting the vast majority of existing React modules you might find on npm. The `preact/compat` package provides all the necessary tweaks on top of Preact's core to make it work just like `react` and `react-dom`, in a single module.
+`preact/compat`を使うことによってワークフローやコードベースを変更することなく既存のReact/ReactDOMで作られたコードを成長させていくことができます。
+`preact/compat`はバンドルサイズを2kb増加させますが、npmにあるほとんどのReact用のモジュールを利用できるようになるという利点があります。
+`preact/compat`パッケージはPreactコアに`react`と`react-dom`と同じように動作するような調整を加えたものです。
 
 ---
 
@@ -16,13 +18,17 @@ This lets you continue writing React/ReactDOM code without any changes to your w
 
 ---
 
-## Setting up compat
+## compatの設定
 
-To set up `preact/compat` you need to alias `react` and `react-dom` to `preact/compat`. The [Getting Started](/guide/v10/getting-started#aliasing-react-to-preact) page goes into detail on how aliasing is configured in various bundlers.
+`preact/compat`を設定するには`react`と`react-dom`を`preact/compat`にエイリアスする必要があります。
+バンドラでエイリアスする方法を詳しく知りたい場合は[はじめに](/guide/v10/getting-started#aliasing-react-to-preact)を読んでください。
 
 ## PureComponent
 
-The `PureComponent` class works similarily to `Component`. The difference is that `PureComponent` will skip rendering when the new props are equal to the old ones. To do this we compare the old and new props via a shallow comparison where we check each props property for referential equality. This can speed up applications a lot by avoiding unnecessary re-renders. It works by adding a default `shouldComponentUpdate` lifecycle hook.
+`PureComponent`クラスは`Component`クラスと似た動作をします。
+違いは新しい`props`が古い`props`と等しい場合、`PureComponent`はレンダリングをスキップする点です。
+`PureComponent`はこれを行うために浅い(shallow)比較で古い`props`と新しい`props`を比較して`props`が参照的に等しいか確認します。
+これによって不要な再レンダリングを避けることができます。これでアプリケーションは大幅にスピードアップします。
 
 ```jsx
 import { render } from 'preact';
@@ -39,15 +45,16 @@ const dom = document.getElementById('root');
 render(<Foo value="3" />, dom);
 // Logs: "render"
 
-// Render a second time, doesn't log anything
+// 2回目のレンダリングではログを出力しません。
 render(<Foo value="3" />, dom);
 ```
 
-> Note that the advantage of `PureComponent` only pays off when then render is expensive. For simple children trees it can be quicker to just do the `render` compared to the overhead of comparing props.
+> `PureComponent`はレンダリングコストが高い場合のみ有効です。レンダリングコストが低い場合、`props`を比較するオーバーヘッドよりレンダリングだけした方が早いことがあります。
 
 ## memo
 
-`memo` is equivalent to functional components as `PureComponent` is to classes. It uses the same comparison function under the hood, but allows you to specify your own specialized function optimized for your use case.
+`memo`は関数コンポーネントのクラスにおける`PureComponent`に相当します。
+デフォルトでは`PureComponent`と同じ比較をしますが、個別に比較を行う関数を設定することもできます。
 
 ```jsx
 import { memo } from 'preact/compat';
@@ -56,21 +63,21 @@ function MyComponent(props) {
   return <div>Hello {props.name}</div>
 }
 
-// Usage with default comparison function
+// デフォルトの比較を使用する
 const Memoed = memo(MyComponent);
 
-// Usage with custom comparison function
+// 比較を行う関数を設定する
 const Memoed2 = memo(MyComponent, (prevProps, nextProps) => {
-  // Only re-render when `name' changes
+  // `name`が変わった場合のみ再レンダリングする
   return prevProps.name === nextProps.name;
 })
 ```
 
-> The comparison function is different from `shouldComponentUpdate` in that it checks if the two props objects are **equal**, whereas `shouldComponentUpdate` checks if they are different.
+> `memo`に渡す比較関数は再レンダリングをスキップしたい場合は`true`を返します。`shouldComponentUpdate`は再レンダリングをスキップしたい場合は`false`を返します。両者の戻り値が逆なことに注意してください。
 
 ## forwardRef
 
-In some cases when writing a component you want to allow the user to get hold of a specific reference further down the tree. With `forwardRef` you can sort-of "forward" the `ref` property:
+`forwardRef`を使うとコンポーネントの外部からコンポーネント内部の要素を参照することができます。
 
 ```jsx
 import { createRef, render } from 'preact';
@@ -80,17 +87,17 @@ const MyComponent = forwardRef((props, ref) => {
   return <div ref={ref}>Hello world</div>;
 })
 
-// Usage: `ref` will hold the reference to the inner `div` instead of
-// `MyComponent`
+// refはMyComponentではなくMyComponent内部の`div`の参照を持ちます。
 const ref = createRef();
 render(<MyComponent ref={ref} />, dom)
 ```
 
-This component is most useful for library authors.
+これはライブラリの開発にとても役立ちます。
 
 ## Portals
 
-In rare circumstances you may want to continue rendering into a different DOM node. The target DOM node **must** be present before attempting to render into it.
+`createPortal`を使うとレンダリング時に別のDOM Nodeの下にレンダリングしたものを加えることができます。
+ターゲットとなるDOM Nodeはレンダリング時よりも前に**存在している必要があります**。
 
 ```html
 <html>
@@ -118,11 +125,12 @@ function App() {
 }
 ```
 
-> Keep in mind that due to Preact reusing the browser's event system, events won't bubble up through a Portal container to the other tree.
+> Preactはブラウザのイベントシステムを使用しているのでイベントがPortalコンテナを通じて他のツリーにバブルアップしないことを忘れないでください。
 
-## Suspense (experimental)
+## Suspense (実験的な機能)
 
-The main idea behind `Suspense` is to allow sections of your UI to display some sort of placeholder content while components further down the tree are still loading. A common use case for this is code-splitting where you'll need to load a component from the network before you can render it.
+`Suspense`を使うとSuspenseの下に存在する子コンポーネントがロード中の場合はプレイスフォルダを表示することができます。
+一般的なユースケースとして、レンダリングする前にネットワークからコンポーネントをロードする必要があるcode-splittingに使われます。
 
 ```jsx
 import { Suspense, lazy } from `preact/compat`;
@@ -137,6 +145,6 @@ const SomeComponent = lazy(() => import('./SomeComponent'));
 </Suspense>
 ```
 
-In this example the UI will display the `loading...` text until `SomeComponent` is loaded and the Promise is resolved.
+この例ではUIは`loading...`というテキストを`SomeComponent`コンポーネントがロードされてPromiseがresolveするまで表示します。
 
-> This feature is experimental and may contain bugs. We have included it as an early preview to increase testing visibility. We don't recommend using it in production.
+> この機能は実験的な機能でバグがあるかもしれません。テストの可視性を高めるためにプレビュー版に含めました。Production環境では使用しないことをお勧めします。
