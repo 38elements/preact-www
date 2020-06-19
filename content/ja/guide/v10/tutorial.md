@@ -1,13 +1,13 @@
 ---
-name: Tutorial
-description: 'Write your first Preact application'
+name: チュートリアル
+description: '初めてのPreactアプリケーションを書きましょう。'
 ---
 
-# Tutorial
+# チュートリアル
 
-This guide walks through building a simple "ticking clock" component. More detailed information for each topic can be found in the dedicated pages under the Guide menu.
+このガイドではシンプルなClockコンポーネントを開発していきます。各トピックの詳細はガイドメニューにある専用ページを見てください。
 
-> :information_desk_person: This guide assumes that you completed the [Getting Started](/guide/v10/getting-started) document and have successfully set up your tooling. If not, start with [preact-cli](/guide/v10/getting-started#best-practices-powered-with-preact-cli).
+> :information_desk_person: このガイドは[はじめに](/guide/v10/getting-started)を読み終えてツールの設定が完了していることを前提としています。そうでないなら、[preact-cli](/guide/v10/getting-started#best-practices-powered-with-preact-cli)から読み始めてください。
 
 ---
 
@@ -17,34 +17,40 @@ This guide walks through building a simple "ticking clock" component. More detai
 
 ## Hello World
 
-Out of the box, the two functions you'll always see in any Preact codebase are `h()` and `render()`. The `h()` function is used to turn JSX into a structure Preact understands. But it can also be used directly without any JSX involved:
+Preactのコードベースですぐに目にする2つの関数があります。それは`h()`と`render()`です。
+`h()`関数はJSXをPreactで利用できるデータに変換するために使われます。
+JSXを使わずに直接`h()`を使用することもできます。
 
 ```jsx
-// With JSX
+// JSX版
 const App = <h1>Hello World!</h1>;
 
-// ...the same without JSX
+// 上記と同じ内容のJSX使わない版
 const App = h('h1', null, 'Hello World');
 ```
 
-This alone doesn't do anything and we need a way to inject our Hello-World app into the DOM. For this we use the `render()` function.
+これだけでは何も起きません。Hello-WorldアプリケーションをDOMに挿入する必要があります。
+そのために`render()`関数を使います。
 
 ```jsx
 const App = <h1>Hello World!</h1>;
 
-// Inject our app into the DOM
+// アプリケーションをDOMに挿入する
 render(App, document.body);
 ```
 
-Congratulations, you've build your first Preact app!
+おめでとう。最初のPreactアプリケーションを構築しました。
 
-## Interactive Hello World
+## インタラクティブなHello World
 
-Rendering text is a start, but we want to make our app a little more interactive. We want to update it when data changes. :star2:
+最初の一歩としてテキストのレンダリングを行いました。これを少しだけインタラクティブにしたいと思います。
+データの変更を反映できるようにします。 :star2:
 
-Our end goal is that we have an app where the user can enter a name and display it, when the form is submitted. For this we need to have something where we can store what we submitted. This is where [Components](/guide/v10/components) come into play.
+ユーザが名前を入力してsubmitボタンを押した時に、それが表示されるようにします。
+このために入力した値を保存する場所が必要です。
+このために[Components](/guide/v10/components)を使います。
 
-So let's turn our existing App into a [Components](/guide/v10/components):
+既存のアプリケーションを[Components](/guide/v10/components)にしましょう。
 
 ```jsx
 import { h, render, Component } from 'preact';
@@ -58,7 +64,9 @@ class App extends Component {
 render(<App />, document.body);
 ```
 
-You'll notice that we added a new `Component` import at the top and that we turned `App` into a class. This alone isn't useful but it's the precursor for what we're going to do next. To make things a little more exciting we'll add a form with a text input and a submit button.
+上記では上部で`Component`をインポートして`App`をクラスに変更しています。
+これだけでは何も変わりませんが、これはこれからの変更のための用意です。
+次にtext input要素とsubmitボタンを追加します。
 
 ```jsx
 import { h, render, Component } from 'preact';
@@ -80,22 +88,25 @@ class App extends Component {
 render(<App />, document.body);
 ```
 
-Now we're talking! It's starting to look like a real app! We still need to make it interactive though. Remember that we'll want to change `"Hello world!"` to `"Hello, [userinput]!"`, so we need a way to know the current input value.
+徐々にアプリケーションの形になってきました。
+次にインタラクティブな処理を追加します。
+`"Hello, world!"`を`"Hello, <ユーザが入力した文字列>!"`に変更します。それには入力した値を得る必要があります。
 
-We'll store it in a special property called `state` of our Component. It's special, because when it's updated via the `setState` method, Preact will not just update the state, but also schedule a render request for this component. Once the request is handled, our component will be re-rendered with the updated state.
+入力した値をコンポーネントの`state`という特別なプロパティに保存します。
+`state`は`setState`メソッドで更新されます。その際に、ただ更新されるだけでなくコンポーネントのレンダリングがリクエストされます。
+リクエストを受けるとコンポーネントは更新された`state`を使って再レンダリングします。
 
-Lastly we need to attach the new state to our input by setting `value` and attaching an event handler to the `input` event.
+最後に`value`プロパティがある`state`を加えて、`input`イベントにイベントハンドラを付与します。
 
 ```jsx
 import { h, render, Component } from 'preact';
 
 class App extends Component {
-  // Initialise our state. For now we only store the input value
+  // stateを初期化します。入力された値の保存のみに使用します。
   state = { value: '' }
 
   onInput = ev => {
-    // This will schedule a state update. Once updated the component
-    // will automatically re-render itself.
+    // stateを更新してコンポーネントの再レンダリングを行います。
     this.setState({ value: ev.target.value });
   }
 
@@ -115,22 +126,23 @@ class App extends Component {
 render(<App />, document.body);
 ```
 
-At this point the app shouldn't have changed much from a users point of view, but we'll bring all the pieces together in our next step.
+この時点では見た目は変わっていません。次で結構変わります。
 
-We'll add a handler to the `submit` event of our `<form>` in similar fashion like we just did for the input. The difference is that it writes into a different property of our `state` called `name`. Then we swap out our heading and insert our `state.name` value there.
+`<form>`に`<input>`に対してしたように`submit`イベントへのイベントハンドラを付与します。
+`state`の`name`プロパティに入力された値を保存します。そして、`<h1>`に`state.name`を挿入します。
 
 ```jsx
 import { h, render, Component } from 'preact';
 
 class App extends Component {
-  // Add `name` to the initial state
+  // `name`を初期stateに追加します。
   state = { value: '', name: 'world' }
 
   onInput = ev => {
     this.setState({ value: ev.target.value });
   }
 
-  // Add a submit handler that updates the `name` with the latest input value
+  // nameに最新のinput要素の値をセットするためのsubmitイベントハンドラを追加します。
   onSubmit = () => {
     this.setState({ name: this.state.value });
   }
@@ -151,11 +163,11 @@ class App extends Component {
 render(<App />, document.body);
 ```
 
-Boom! We're done! We can now enter a custom name, click "Update" and our new name appears in our heading.
+input text要素に名前を入力して"Update"ボタンをクリックすると入力した名前がh1要素に反映されます。
 
-## A Clock Component
+## Clockコンポーネント
 
-We wrote our first component, so let's get a little more practice. This time we build a clock.
+最初のコンポーネントを作りました。次は少し実践的な物を作りましょう。今度は時計を作ります。
 
 ```jsx
 import { h, render, Component } from 'preact';
@@ -170,9 +182,12 @@ class Clock extends Component {
 render(<Clock />, document.body);
 ```
 
-Ok, that was easy enough! Problem is, that the time doesn't change. It's frozen at the moment we rendered our clock component.
+何が問題か一目でわかります。時刻が変わりません。Clockコンポーネントをレンダリングした瞬間にフリーズしました。
 
-So, we want to have a 1-second timer start once the Component gets added to the DOM, and stop if it is removed. We'll create the timer and store a reference to it in `componentDidMount`, and stop the timer in `componentWillUnmount`. On each timer tick, we'll update the component's `state` object with a new time value. Doing this will automatically re-render the component.
+だから、コンポーネントがDOMにマウントされた時に1秒ごとのタイマーをスタートして、削除されたら停止するようにします。
+タイマーを`componentDidMount`で作成して、その参照を保存します。そして、`componentWillUnmount`でタイマーを停止します。
+タイマーが実行されるごとにコンポーネントの`state`オブジェクトが新しい時刻の値に更新されます。
+これで自動的にコンポーネントが再レンダリングされます。
 
 ```jsx
 import { h, render, Component } from 'preact';
@@ -180,17 +195,17 @@ import { h, render, Component } from 'preact';
 class Clock extends Component {
   state = { time: Date.now() };
 
-  // Called whenever our component is created
+  // コンポーネントがマウントされた時に実行されます。
   componentDidMount() {
-    // update time every second
+    // 1秒ごとに時刻を更新します。
     this.timer = setInterval(() => {
       this.setState({ time: Date.now() });
     }, 1000);
   }
 
-  // Called just before our component will be destroyed
+  // コンポーネントが削除される直前に実行されます。
   componentWillUnmount() {
-    // stop when not renderable
+    // 再レンダリングを停止します。
     clearInterval(this.timer);
   }
 
@@ -203,4 +218,4 @@ class Clock extends Component {
 render(<Clock />, document.body);
 ```
 
-And we did it again! Now we have [a ticking clock](http://jsfiddle.net/developit/u9m5x0L7/embedded/result,js/)!
+[時計](http://jsfiddle.net/developit/u9m5x0L7/embedded/result,js/)が完成しました。

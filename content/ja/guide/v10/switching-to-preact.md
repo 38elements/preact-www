@@ -130,7 +130,7 @@ function App() {
 ## Suspense (実験的な機能)
 
 `Suspense`を使うとSuspenseの下に存在する子コンポーネントがロード中の場合はプレイスフォルダを表示することができます。
-一般的なユースケースとして、レンダリングする前にネットワークからコンポーネントをロードする必要があるcode-splittingに使われます。
+一般的なユースケースとして、レンダリングする前にネットワークからコンポーネントをロードする必要があるcode-splittingがあります。
 
 ```jsx
 import { Suspense, lazy } from `preact/compat`;
