@@ -1,25 +1,20 @@
 ---
-name: Unit Testing with Enzyme
+name: Enzymeを使って単体テストを行う
 permalink: '/guide/unit-testing-with-enzyme'
-description: 'Testing Preact applications made easy with enzyme'
+description: 'Enzymeを使ってPreactアプリケーションの単体テストを行う。'
 ---
 
-# Unit Testing with Enzyme
+# Enzymeを使って単体テストを行う
 
-Airbnb's [Enzyme](https://airbnb.io/enzyme/) is a library for writing
-tests for React components. It supports different versions of React and
-React-like libraries using "adapters". There is an adapter for Preact,
-maintained by the Preact team.
+Airbnbの[Enzyme](https://airbnb.io/enzyme/)はReactのコンポーネントをテストするためのライブラリです。
+Enzymeはアダプターを使用することで異なるバージョンのReactとそれに類するライブラリをサポートします。
+PreactチームがメンテナンスしているPreact用のアダプターがあるのでEnzymeを使ってPreactのコンポーネントのテストを行うことができます。
 
-Enzyme supports tests that run in a normal or headless browser using a tool
-such as [Karma](http://karma-runner.github.io/latest/index.html) or tests that
-run in Node using [jsdom](https://github.com/jsdom/jsdom) as a fake
-implementation of browser APIs.
+Enzymeは[Karma](http://karma-runner.github.io/latest/index.html)を使った通常のブラウザやヘッドレスブラウザでのテストや
+NodeJSで仮想的なブラウザAPIの実装である[jsdom](https://github.com/jsdom/jsdom)を使ったテストをサポートします。
 
-For a detailed introduction to using Enzyme and an API reference, see the
-[Enzyme documentation](https://airbnb.io/enzyme/). The remainder of this guide
-explains how to set Enzyme up with Preact, as well as ways in which Enzyme with
-Preact differs from Enzyme with React.
+Enzymeの詳しい使い方とAPIリファレンスは[Enzymeのドキュメント](https://airbnb.io/enzyme/)を見てください。
+このガイドの残りの部分はEnzymeをPreactで設定する方法とPreactと一緒に使う場合とReactと一緒に使う場合の違いについて説明します。
 
 ---
 
@@ -27,18 +22,17 @@ Preact differs from Enzyme with React.
 
 ---
 
-## Installation
+## インストール
 
-Install Enzyme and the Preact adapter using:
+以下のようにEnzymeとPreactアダプターをインストールします。
 
 ```sh
 npm install --save-dev enzyme enzyme-adapter-preact-pure
 ```
 
-## Configuration
+## 設定
 
-In your test setup code, you'll need to configure Enzyme to use the Preact
-adapter:
+Preactのアダプターを使うためにテストのセットアップコードでEnzymeの設定を行う必要があります。
 
 ```js
 import { configure } from 'enzyme';
@@ -47,14 +41,11 @@ import Adapter from 'enzyme-adapter-preact-pure';
 configure({ adapter: new Adapter() });
 ```
 
-For guidance on using Enzyme with different test runners, see the
-[Guides](https://airbnb.io/enzyme/docs/guides.html) section of the Enzyme
-documentation.
+各テストランナーでEnzymeを使う方法についてはEnzymeのドキュメントの[Guides](https://airbnb.io/enzyme/docs/guides.html)セクションを見てください。
 
-## Example
+## 例
 
-Suppose we have a simple `Counter` component which displays an initial value,
-with a button to update it:
+以下のような初期値を表示し、それを更新するボタンがあるシンプルな`Counter`コンポーネントがあるとします。
 
 ```jsx
 import { h } from 'preact';
@@ -73,8 +64,7 @@ export default function Counter({ initialCount }) {
 }
 ```
 
-Using a test runner such as mocha or Jest, you can write a test to check that
-it works as expected:
+以下のようにMochaやJest等のテストランナーを使って、期待通りに動作するかチェックするテストを書くことができます。
 
 ```jsx
 import { expect } from 'chai';
@@ -99,81 +89,59 @@ describe('Counter', () => {
 });
 ```
 
-For a runnable version of this project and other examples, see the
-[examples/](https://github.com/preactjs/enzyme-adapter-preact-pure/blob/master/README.md#example-projects)
-directory in the Preact adapter's repository.
+サポートしているバージョンや他の例はPreact用アダプターのレポジトリの[examples/](https://github.com/preactjs/enzyme-adapter-preact-pure/blob/master/README.md#example-projects)ディレクトリを見てください。
 
-## How Enzyme works
+## Enzymeの仕組み
 
-Enzyme uses the adapter library it has been configured with to render a
-component and its children. The adapter then converts the output to a
-standardized internal representation (a "React Standard Tree"). Enzyme then wraps
-this with an object that has methods to query the output and trigger updates.
-The wrapper object's API uses CSS-like
-[selectors](https://airbnb.io/enzyme/docs/api/selector.html) to locate parts of
-the output.
+Enzymeはコンポーネントとその子コンポーネントをレンダリングするために設定されたアダプターライブラリを使います。
+それから、アダプターはアプトプットを標準化された内部表現("React Standard Tree")に変換します。
+それから、Enzymeはアウトプットを検索し更新をトリガするメソッドを持つオブジェクトをラップします。
+ラッパオブジェクトのAPIはCSSに似た[selectors](https://airbnb.io/enzyme/docs/api/selector.html)を使って該当部分を見つけます。
 
-## Full, shallow and string rendering
+## フルレンダリング、浅い(shallow)レンダリング、文字列レンダリング
 
-Enzyme has three rendering "modes":
+Enzymeは3つのレンダリングモードがあります。
 
 ```jsx
 import { mount, shallow, render } from 'enzyme';
 
-// Render the full component tree:
+// コンポーネントツリー全体をレンダリングします。
 const wrapper = mount(<MyComponent prop="value"/>);
 
-// Render only `MyComponent`'s direct output (ie. "mock" child components
-// to render only as placeholders):
+// MyComponentのDOMノードのみレンダリングします。(子コンポーネントはモックされてプレイスフォルダでレンダリングします。)
 const wrapper = shallow(<MyComponent prop="value"/>);
 
-// Render the full component tree to an HTML string, and parse the result:
+// コンポーネントツリーをHTMLでレンダリングしてパースしたものを返します。
 const wrapper = render(<MyComponent prop="value"/>);
 ```
 
- - The `mount` function renders the component and all of its descendants in the
-   same way they would be rendered in the browser.
+ - `mount`関数はコンポーネント全体をブラウザでレンダリングするのと同じ方法でレンダリングします。
 
- - The `shallow` function renders only the DOM nodes that are directly output
-   by the component. Any child components are replaced with placeholders that
-   output just their children.
+ - `shallow`関数はコンポーネント内のDOMノードのみレンダリングします。
+   子コンポーネントはそれを表すプレイスフォルダに置き換えられます。
 
-   The advantage of this mode is that you can write tests for components without
-   depending on the details of child components and needing to construct all
-   of their dependencies.
+   このモードの利点は子コンポーネントに依存しないのでその依存関係を解決することなくテストを書くことができます。
 
-   The `shallow` rendering mode works differently internally with the Preact
-   adapter compared to React. See the Differences section below for details.
+   浅い(shallow)レンダリングモードは内部の動作がPreact用のアダプターとReact用のアダプターでは異なります。詳しくは以下の「Reactとの違い」のセクションを見てください。
 
- - The `render` function (not to be confused with Preact's `render` function!)
-   renders a component to an HTML string. This is useful for testing the output
-   of rendering on the server, or rendering a component without triggering any
-   of its effects.
+ - `render`関数(Preactの`render`関数と混同しないでください)はコンポーネントをHTML文字列にレンダリングします。
+   これはサーバー上で出力をテストすることやエフェクトのトリガ無しでコンポーネントをレンダリングすることに役立ちます。
 
-## Triggering state updates and effects with `act`
+## `act`でステートの更新とその効果をトリガする
 
-In the previous example, `.simulate('click')` was used to click on a button.
+前の例では、`.simulate('click')`を使ってボタンをクリックしました。
 
-Enzyme knows that calls to `simulate` are likely to change the state of a
-component or trigger effects, so it will apply any state updates or effects
-immediately before `simulate` returns. Enzyme does the same when the component
-is rendered initially using `mount` or `shallow` and when a component is updated
-using `setProps`.
+Enzymeは`simulate`によってステート(state)が更新されそれの効果がトリガされることを知っています。だから、Enzymeは`simulate`関数が終了する直前でステートを更新して効果をトリガします。
+Enzymeは最初に`mount`や`shallow`を使ってレンダリングする時や`setProps`を使ってコンポーネントを更新する時も同じ処理を行います。
 
-If however an event happens outside of an Enzyme method call, such as directly
-calling an event handler (eg. the button's `onClick` prop), then Enzyme will not
-be aware of the change. In this case, your test will need to trigger execution
-of state updates and effects and then ask Enzyme to refresh its view of the
-output.
+しかし、Enzymeのメソッド以外でイベントが発生した場合、例えばイベントハンドラ(ボタンの`onClick` prop)を直接実行した場合、Enzymeは変化に気づきません。
+この場合、テストはステートの更新とその効果のトリガを実行する必要があります。そして、Enzymeにアウトプットであるビューを再生成させる必要があります。
 
-- To execute state updates and effects synchronously, use the `act` function
-  from `preact/test-utils` to wrap the code that triggers the updates
-- To update Enzyme's view of rendered output use the wrapper's `.update()`
-  method
+- ステートの更新とその効果を同期的に実現するために、`preact/test-utils`の`act`関数を更新をトリガするコードをラップして使います。
+- `update`メソッドでレンダリングされたアウトプットのEnzymeのビューを更新します。
 
-For example, here is a different version of the test for incrementing the
-counter, modified to call the button's `onClick` prop directly, instead of going
-through the `simulate` method:
+例えば、以下にカウンターを加算するテストの別バージョンを示します。
+`simulate`メソッドを経由する代わりにボタンのonClick propを実行するように変更しました。
 
 ```js
 import { act } from 'preact/test-utils';
@@ -185,41 +153,29 @@ it('should increment after "Increment" button is clicked', () => {
     const onClick = wrapper.find('button').props().onClick;
 
     act(() => {
-      // Invoke the button's click handler, but this time directly, instead of
-      // via an Enzyme API
+      // ボタンのクリックハンドラを実行しますが、今回はEnzyme APIを経由する代わりに直接実行します。
       onClick();
     });
-    // Refresh Enzyme's view of the output
+    // Enzymeのアウトプットのビューを再生成します。
     wrapper.update();
 
     expect(wrapper.text()).to.include('Current value: 6');
 });
 ```
 
-## Differences from Enzyme with React
+## Reactとの違い
 
-The general intent is that tests written using Enzyme + React can be easily made
-to work with Enzyme + Preact or vice-versa. This avoids the need to rewrite all
-of your tests if you need to switch a component initially written for Preact
-to work with React or vice-versa.
+理想はReact + Enzymeで書かれたテストがEnzyme + Preactでもその逆でも簡単に動作させることができることです。
+これによって、ReactとPreactを切り替える際にテストを書き直さなくてよくなります。
 
-However there are some differences in behavior between this adapter and Enzyme's
-React adapters to be aware of:
+しかし、Preact用のアダプターとReact用のアダプターには注意すべき違いがあります。
 
-- The "shallow" rendering mode works differently under the hood. It is
-  consistent with React in only rendering a component "one level deep" but,
-  unlike React, it creates real DOM nodes. It also runs all of the normal
-  lifecycle hooks and effects.
-- The `simulate` method dispatches actual DOM events, whereas in the React
-  adapters, `simulate` just calls the `on<EventName>` prop
-- In Preact, state updates (eg. after a call to `setState`) are batched together
-  and applied asynchronously. In React state updates can be applied immediately
-  or batched depending on the context. To make writing tests easier, the
-  Preact adapter flushes state updates and effects after initial renders and
-  updates triggered via `setProps` or `simulate` calls on an adapter. When state updates or
-  effects are triggered by other means, your test code may need to manually
-  trigger flushing of effects and state updates using `act` from
-  the `preact/test-utils` package.
+- 内部で浅い(shallow)レンダリングは異なる動作をします。
+  1階層だけレンダリングすることは両者とも同じですが、React用とは異なり、Preact用のアダプターの方は実際のDOMノードを作成ます。そして通常のライフサイクルフックと副作用を実行します。
+- `simulate`メソッドはPreat用のアダプターでは実際のDOMイベントをディスパッチします。React用のアダプターでは`on<EventName>` propを呼ぶだけです。
+- Preactではステート(state)の更新(`setState`を実行した後)はまとめて行われ、非同期で適用されます。
+  Reactではステートの更新はコンテキストに応じて直接もしくはまとめて適用されます。
+  テストを書きやすくするために、Preact用のアダプターは`setState`もしくは`setProps`によるレンダリングとステートの更新の後にステートの更新とその効果を全部反映します。
+  ステートの更新またはその効果がそれ以外の方法で更新された場合、テストコードで`preact/test-utils`パッケージの`act`をステートの更新とその効果を手動でトリガしてまとめて実行する必要があります。
 
-For further details, see [the Preact adapter's
-README](https://github.com/preactjs/enzyme-adapter-preact-pure#differences-compared-to-enzyme--react).
+より詳しい説明は[Preact用のアダプターのREADME](https://github.com/preactjs/enzyme-adapter-preact-pure#differences-compared-to-enzyme--react)を見てください。

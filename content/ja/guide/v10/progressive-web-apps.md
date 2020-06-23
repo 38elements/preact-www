@@ -70,7 +70,6 @@ Preactはすぐにロードされ操作が可能になることを求められ�
 
 ## パフォーマンスtips
 
-While Preact is a drop-in that should work well for your PWA, it can also be used with a number of other tools and techniques.
 PreactはPWAにとても適しているだけではなく、それ以外のパフォーマンスを改善するツールやテクニックを使うことができます。
 それらの一部を以下に記述します。
 
@@ -80,7 +79,6 @@ PreactはPWAにとても適しているだけではなく、それ以外のパ�
           <div class="_bubble" style="background-image: url(/assets/pwa-guide/code-splitting.svg);"></div>
         </div>
         <div class="list-detail">
-          <p class="_summary"><strong><a href="https://webpack.js.org/guides/code-splitting/">Code-splitting</a></strong> breaks up your code so you only ship what the user needs for a page. Lazy-loading the rest as needed improves page load times. Supported via Webpack.</p>
           <p class="_summary">
 	    <strong><a href="https://webpack.js.org/guides/code-splitting/">Code-splitting</a></strong>はコードを分割して最初のページを表示するために必要な物のみを提供し、残りは遅延ロードで必要な時にロードします。
 	    これによってロード時間が短くなります。
