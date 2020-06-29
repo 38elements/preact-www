@@ -1,13 +1,14 @@
 ---
-name: Upgrading from Preact 8.x
-description: 'Upgrade your Preact 8.x application to Preact X'
+name: Preact 8.xからアップグレードする
+description: 'Preact 8.xからPreact Xにアップグレードする'
 ---
 
-# Upgrading from Preact 8.x
+# Preact 8.xからアップグレードする
 
-This document is intended to guide you through upgrading an existing Preact 8.x application to Preact X and is divided in 3 main sections
+このドキュメントはPreact 8.xのアプリケーションをPreact Xにアップグレードする方法を説明します。主に3つのセクションに別れています。
 
-Preact X brings many new exciting features such as `Fragments`, `hooks` and much improved compatibility with the React ecosystem. We tried to keep any breaking changes to the minimum possible, but couldn't eliminate all of them completely without compromising on our feature set.
+Preact Xは`Fragments`、`hooks`等の多くの新しい機能を提供します。また、Reactのエコシステムとの互換性を大幅に向上しました。
+その際、breaking changeを最小にするように努めましたが、機能を実装するために多少のbreaking changeが存在します。
 
 ---
 
@@ -15,75 +16,88 @@ Preact X brings many new exciting features such as `Fragments`, `hooks` and much
 
 ---
 
-## Upgrading dependencies
+## 依存しているライブラリのアップグレード
 
-_Note: Throughout this guide we'll be using the `npm` client and the commands should be easily applicable to other package managers such as `yarn`._
+_ここではパッケージマネージャとして`npm`を使用しますが、`yarn`のような他のパッケージマネージャを使用しても問題ありません。_
 
-Let's begin! First install Preact X:
+では、始めましょう。最初にPreact Xをインストールします。
 
 ```bash
 npm install preact
 ```
 
-Because compat has moved to core, there is no need for `preact-compat` anymore. Remove it with:
+`preact-compat`はコアに移動したので必要ありません。削除します。
 
 ```bash
 npm remove preact-compat
 ```
 
-### Updating preact-related libraries
+### Preactに関連したライブラリの更新
 
-To guarantee a stable ecosystem for our users (especially for our enterprise users) we've released major version updates to Preact X related libraries. If you're using `preact-render-to-string` you need to update it to the version that works with X.
+Preact関連のライブラリをメジャーバージョンを上げてPreact Xに対応させました。
+これによって、ユーザ(特にエンタープライズユーザ)に安定したエコシステムを提供できます。
+以下の表にあるように、`preact-render-to-string`を使っている場合、Preact Xに対応しているバージョンに変更する必要があります。
 
-| Library                   | Preact 8.x | Preact X |
+| ライブラリ                | Preact 8.x | Preact X |
 | ------------------------- | ---------- | -------- |
 | `preact-render-to-string` | 4.x        | 5.x      |
 | `preact-router`           | 2.x        | 3.x      |
 | `preact-jsx-chai`         | 2.x        | 3.x      |
 | `preact-markup`           | 1.x        | 2.x      |
 
-### Compat has moved to core
+### `preact-compat`はコアに移動しました
 
-To make third-party React libraries work with Preact we ship a **compat**ibility layer that can be imported via `preact/compat`. It was previously available as a separate package, but to make coordination easier we've moved it into the core repository. So you'll need to change existing import or alias declarations from `preact-compat` to `preact/compat` (note the slash).
+サードパーティのReactライブラリをPreactで動作させるために**互換**レイヤーとして`preact/compat`があります。
+互換レイヤーは以前のバージョンでは別パッケージで提供していましたがコアとの調整を用意にするためにコアのレポジトリに移動しました。
+既存のインポートやエイリアスの宣言を`preact-compat`から`preact/compat`に変更する必要があります。(スラッシュに注意してください)
 
-Be careful not to introduce any spelling errors here. A common one seems to be to write `compact` instead of `compat`. If you're having trouble with that, think of `compat` as the `compatibility` layer for react. That's where the name is coming from.
+スペルミスに注意してください。
+よくあるミスは`compat`を`compact`と書くことです。
+`compat`は`compatibility`(互換性)から取りました。
+これが名前の由来です。
 
-> If you're using `preact-cli` than this step is already done for you :tada:
+> `preact-cli`を使っているならこのステップは既に完了しています。 :tada:
 
-### Third party libraries
+### サードパーティライブラリ
 
-Due to the nature of the breaking changes, some existing libraries may cease to work with X. Most of them have been updated already following our beta schedule but you may encounter one where this is not the case.
+Preact Xではbreaking changeがあるため、既存のライブラリの中にはPreact Xがうまく動かないものがあるかもしれません。
+それらのほとんどがベータ版にあわせて変更されていますが、もしかしたら変更されてないものもあるかもしれません。
 
 #### preact-redux
 
-`preact-redux` is one of such libraries that hasn't been updated yet. The good news is that `preact/compat` is much more React-compliant and works out of the box with the React bindings called `react-redux`. Switching to it will resolve the situation. Make sure that you've aliased `react` and `react-dom` to `preact/compat` in your bundler.
+`preact-redux`はまだ更新されていないライブラリの1つです。
+良いニュースは`preact/compat`はReactと高いレベルで互換性があるのでReduxのReactバインディングである`react-redux`をそのまま使用できることです。
+だから、`react-redux`を使えば解決します。使用する際はバンドラ内で`react`と`react-dom`が`preact/compat`にエイリアスされているか確認してください。
 
-1. Remove `preact-redux`
-2. Install `react-redux`
+1. `preact-redux`を削除する。
+2. `react-redux`をインストールする。
 
 #### mobx-preact
 
-Due to our increased compatibility with the react-ecosystem this package isn't needed anymore. Use `mobx-react` instead.
+Reactエコシステムとの互換性が改善したため、このライブラリは必要ではなくなりました。代わりに`mobx-react`を使用してください。
 
-1. Remove `mobx-preact`
-2. Install `mobx-react`
+1. `mobx-preact`を削除する。
+2. `mobx-react`をインストールする。
 
 #### styled-components
 
-Preact 8.x only worked up to `styled-components@3.x`. With Preact X this barrier is no more and we work with the latest version of `styled-components`. Make sure that you've [aliased react to preact](#setting-up-aliases) correctly.
+Preact 8.xは`styled-components@3.x`までしか動作しません。
+Preact Xではこの問題は解決しました。最新の`styled-components`を使用することができます。
+使用する際は正しくPreactをReactのエイリアスにすることを確認してください。
 
 #### preact-portal
 
-The `Portal` component is now part of `preact/compat`.
+`Portal`コンポーネントは`preact/compat`に加えられました。
 
-1. Remove `preact-portal`
-2. Import `createPortal` from `preact/compat`
+1. `preact-portal`を削除する。
+2. `preact/compat`から`createPortal`をインポートする。
 
-## Getting your code ready
+## コードを変更する
 
-### Using named exports
+### namedエクスポートを使う
 
-To better support tree-shaking we don't ship with a `default` export in preact core anymore. The advantage of this approach is that only the code you need will be included in your bundle.
+ツリーシェイキング(tree-shaking)をサポートするためにPreact Xでは`default`エクスポートをPreactのコアで行いません。
+この利点はバンドル時に必要なコードだけ含めることができる点です。
 
 ```js
 // Preact 8.x
@@ -92,15 +106,15 @@ import Preact from "preact";
 // Preact X
 import * as preact from "preact";
 
-// Preferred: Named exports (works in 8.x and Preact X)
+// より良い: Named exports (Preact 8.xとPreact Xで動作します。)
 import { h, Component } from "preact";
 ```
 
-_Note: This change doesn't affect `preact/compat`. It still has both named and a default export to remain compatible with react._
+_この変更は`preact/compat`に影響はありません。`preact/compat`ではReactとの互換性のために`default`エクスポートと`named`エクスポートの両方が可能です。_
 
-### `render()` always diffs existing children
+### `render()`は常にコンテナ内にレンダリングした要素を上書きする
 
-In Preact 8.x, the calls to `render()` would always append the elements to the container.
+Preact 8.xで`render()`を実行すると常にコンテナの末尾に要素が追加されます。
 
 ```jsx
 // Existing markup:
@@ -111,7 +125,7 @@ In Preact 8.x, the calls to `render()` would always append the elements to the c
 render(<p>foo</p>, document.body);
 render(<p>bar</p>, document.body);
 
-// Preact 8.x output:
+// Preact 8.xの結果
 <body>
   <div>hello</div>
   <p>foo</p>
@@ -119,7 +133,7 @@ render(<p>bar</p>, document.body);
 </body>
 ```
 
-In order to diff existing children in Preact 8, an existing DOM node had to be provided.
+コンテナ内に存在する既存の要素を置き換えたい場合は、それを`render()`の第3引数に渡します。
 
 ```jsx
 // Existing markup:
@@ -131,17 +145,19 @@ let element;
 element = render(<p>foo</p>, document.body);
 element = render(<p>bar</p>, document.body, element);
 
-// Preact 8.x output:
+// Preact 8.xの結果
 <body>
   <div>hello</div>
   <p>bar</p>
 </body>
 ```
 
-In Preact X, `render()` always diffs DOM children inside of the container. So if your container contains DOM that was not rendered by Preact, Preact will try to diff it with the elements you pass it. This new behavior more closely matches the behavior of other VDOM libraries.
+Preact Xでは、`render()`は常にコンテナ内にレンダリングした要素を上書きします。
+コンテナ内にレンダリングしたDOM要素以外のDOM要素が存在していても、Preactはレンダリングした要素のみ上書きします。
+この新しい振舞いは他の仮想DOMライブラリと同じです。
 
 ```jsx
-// Existing markup:
+// 既存の要素
 <body>
   <div>hello</div>
 </body>
@@ -149,18 +165,23 @@ In Preact X, `render()` always diffs DOM children inside of the container. So if
 render(<p>foo</p>, document.body);
 render(<p>bar</p>, document.body);
 
-// Preact X output:
+// Preact Xの結果
 <body>
   <p>bar</p>
   <div>hello</div>
 </body>
 ```
 
-If you are looking for behavior that exactly matches how React's `render` method works, use the `render` method exported by `preact/compat`.
+Reactの`render`メソッドと同じ振舞いをする`render`メソッドが必要な場合は`preact/compat`がエクスポートしている`render`メソッドを使います。
 
-### `props.children` is not always an `array`
+### `props.children`が必ず`array`とは限らない
 
-In Preact X we can't guarantee `props.children` to always be of type `array` anymore. This change was necessary to resolve parsing ambiguities in regards to `Fragments` and components that return an `array` of children. In most cases you may not even notice it. Only in places where you'll use array methods on `props.children` directly need to be wrapped with `toChildArray`. This function will always return an array.
+Preact Xでは`props.children`が必ず配列ではなくなりました。
+この変更はフラグメント(Fragment)と子コンポーネントを配列で返すコンポーネントを見分けるために必要でした。
+普段はそれに気づかないかもしれません。
+Only in places where you'll use array methods on `props.children` directly need to be wrapped with `toChildArray`.
+`props.children`に配列のメソッドを適用したい場合は`toChildArray`関数に`props.children`を渡す必要があります。
+`toChildArray`関数は`props.children`を配列に変換したものを返します。
 
 ```jsx
 // Preact 8.x
@@ -180,9 +201,11 @@ function Foo(props) {
 }
 ```
 
-### Don't access `this.state` synchronously
+### `this.state`を同期的に更新しない
 
-In Preact X the state of a component will no longer be mutated synchronously. This means that reading from `this.state` right after a `setState` call will return the previous values. Instead you should use a callback function to modify state that depends on the previous values.
+Preact Xではコンポーネントのステート(state)が同期的に変更しなくなりました。
+つまり、`setState`が実行された直後に`this.state`の値を読んでも`setState`でセットした値は反映されていません。それ以前の値を返します。
+`setState`でセットされた値を直後に参照するには、以下のように`setState`にコールバック関数を渡します。
 
 ```jsx
 this.state = { counter: 0 };
@@ -192,16 +215,14 @@ this.setState({ counter: this.state.counter++ });
 
 // Preact X
 this.setState(prevState => {
-  // Alternatively return `null` here to abort the state update
+  // ここでnullを返すとステート(state)の更新を中止します。
   return { counter: prevState.counter++ };
 });
 ```
 
-_Note: We're currently investigating if we can make this easier by shipping a `LegacyComponent` which has the old behaviour._
+### `dangerouslySetInnerHTML`がセットされている場合は`children`の差分処理を行わない
 
-### `dangerouslySetInnerHTML` will skip diffing of children
-
-When a `vnode` has the property `dangerouslySetInnerHTML` set Preact will skip diffing the `vnode's` children.
+`VNode`に`dangerouslySetInnerHTML`プロパティがセットされている場合、Preactは`VNode`の`children`の差分処理を行いません。
 
 ```jsx
 <div dangerouslySetInnerHTML="foo">
@@ -210,34 +231,39 @@ When a `vnode` has the property `dangerouslySetInnerHTML` set Preact will skip d
 </div>
 ```
 
-## Notes for library authors
+## ライブラリ開発者向けの情報
 
-This section is intended for library authors who are maintaining packages to be used with Preact X. You can safely skip this section if you're not writing one.
+このセクションはPreact Xに関連したライブラリの開発者向けです。
+ライブラリの開発者ではないならこのセクションをスキップしても問題ありません。
 
-### The `VNode` shape has changed
+### `VNode`のプロパティが変更された
 
-We renamed/moved the following properties:
+`VNode`のプロパティは以下ように変更されました。
 
 - `attributes` -> `props`
 - `nodeName` -> `type`
 - `children` -> `props.children`
 
-As much as we tried, we always ran into edge-cases with third-party libraries written for react. This change to our `vnode` shape removed many difficult to spot bugs and makes our `compat` code a lot cleaner.
+今まではReact用に書かれたサードパーティライブラリと一緒に動かすとエッジケースに当たりました。
+このプロパティの変更によって、見つけにくい多くのバグが解決しました。また、`compat`のコードがきれいになりました。
 
-### Adjacent text nodes are not joined anymore
+### 隣接するテキストノードが結合されなくなった
 
-In Preact 8.x we had this feature where we would join adjacent text notes as an optimization. This doesn't hold true for X anymore because we're not diffing directly against the dom anymore. In fact we noticed that it hurt performance in X which is why we removed it. Take the following example:
+Preact 8.xでは隣接するテキストノードを結合して最適化していました。
+Preact XではDOMを直接差分をとらないのでこれは必要なくなりました。
+更にPreact Xではこれがパフォーマンスを劣化させることが判明したのでこの機能を削除しました。
+以下の例を見てください。
 
 ```jsx
 // Preact 8.x
 console.log(<div>foo{"bar"}</div>);
-// Logs a structure like this:
+// 以下のような構造を出力します
 //   div
 //     text
 
 // Preact X
 console.log(<div>foo{"bar"}</div>);
-// Logs a structure like this:
+// 以下のような構造を出力します
 //   div
 //     text
 //     text
