@@ -1,13 +1,16 @@
 ---
 name: Web Components
-description: 'How to use webcomponents with Preact.'
+description: 'Web ComponentsとPreactを連携させる方法'
 ---
 
 # Web Components
 
-Due to its lightweight nature Preact is a popular choice for writing web components. Many use it to build a component system that is then wrapped into various web components. This allows you to easily re-use them in other projects where a completely different framework is used.
+Preactは軽量なのでWeb Componentsを作成することによく使われます。
+具体的には、Preactを使ってWeb Componentsにラップされるコンポーネントを作成します。
+これによって、全く異なるフレームワークを使っている他のプロジェクトでもPreactで作成したコンポーネントを簡単に再利用できます。
+PreactでWeb Componentsを作成する方法は[preact-custom-element](https://github.com/preactjs/preact-custom-element)を見てください。
 
-One thing to keep in mind is that Web Components don't replace Preact as they don't have the same goals.
+Web ComponentsとPreactのゴールが異なるので両者は競合関係にありません。
 
 ---
 
@@ -15,9 +18,10 @@ One thing to keep in mind is that Web Components don't replace Preact as they do
 
 ---
 
-## Rendering Web Components
+## Web Componentsをレンダリングする
 
-From Preact's point of view, web components are just standard DOM-Elements. We can render them by using the registered tag name:
+Preactから見るとWeb Componentsは単なるスタンダードなDOM要素にすぎません。
+PreactはWeb Componentsが登録されたタグ名を使ってレンダリングします。
 
 ```jsx
 function Foo() {
@@ -25,9 +29,9 @@ function Foo() {
 }
 ```
 
-## Accessing Instance Methods
+## インスタンスメソッドにアクセスする
 
-To be able to access the instance of your custom web component, we can leverage `refs`.
+`ref`を使うとWeb Componentsのインスタンスにアクセスすることができます。
 
 ```jsx
 function Foo() {
@@ -43,17 +47,19 @@ function Foo() {
 }
 ```
 
-## Triggering custom events
+## カスタムイベントをトリガする
 
-Preact normalizes the casing of standard built-in DOM Events, which is how we can pass an `onChange` prop to `<div>`, when the event listener actually requires lowercase `"change"`. However, Custom Elements often fire custom events as part of their public API, and there's no way to know what custom events might be fired. In order to ensure Custom Elements are seamlessly supported in Preact, any unrecognized event handler props passed to a DOM Element will have their casing preserved.
+PreactはWeb標準のビルトインのDOMイベントに関しては次のような変換処理を行います。
+例えば、`onChange`propが`<div>`に渡されると、propの先頭の`on`を除いて小文字に変換した`"change"`をaddEventListenerに渡します。
+カスタムイベントの場合は小文字への変換を行わず、先頭の`on`を除いた文字列をそのままaddEventListenerに渡します。
 
 ```jsx
-// native DOM event -> listens for a "click" event
+// 以下は標準のDOMイベントです。"click"イベントとして登録します。
 <div onClick={() => console.log('click')} />
 
-// Custom Element
-// Add handler for "IonChange" event
+// 以下はカスタムイベントです。
+// "IonChange"イベントとして登録します。
 <my-foo onIonChange={() => console.log('IonChange')} />
-// Add handler for "ionChange" event (note the casing)
+// "ionChange"イベントとして登録します。(iが小文字であることに注目)
 <my-foo onionChange={() => console.log('ionChange')} />
 ```
