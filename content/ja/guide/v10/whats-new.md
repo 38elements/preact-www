@@ -1,13 +1,14 @@
 ---
-name: What's new in Preact X
-description: 'New features and changes in Preact X'
+name: Preact Xの新機能
+description: 'Preact Xの新機能と変更点'
 ---
 
-# What's new in Preact X
+# Preact Xの新機能
 
-Preact X is a huge step forward from Preact 8.x. We've rethought every bit and byte of our code and added a plethora of major features in the process. Same goes for compatibility enhancements to support more third-party libraries.
+Preact XはPreact 8.xから大きく前進しました。私達はコードの隅々まで見直し、このリリースで多数の重要な機能を追加しました。また、Reactとの互換性が向上し、より多くのサードパーティ製のライブラリをサポートできるようになりました。
 
-In a nutshell Preact X is what we always wanted Preact to be: A tiny, fast and feature-packed library. And speaking of size, you'll be happy to hear that all the new features and improved rendering fit into the same size footprint as `8.x`!
+端的に言えば、Preact Xは私達が常に求めていた小さくて、高速で、高機能なPreactです。
+サイズに関しては新機能の追加やレンダリングの改善あったにも関わらず、`8.x`と同じサイズに収まりました。
 
 ---
 
@@ -17,9 +18,11 @@ In a nutshell Preact X is what we always wanted Preact to be: A tiny, fast and f
 
 ## Fragments
 
-`Fragments` are a major new feature of Preact X, and one of the main motivations for rethinking Preact's architecture. They are a special kind of component that renders children elements inline with their parent, without an extra wrapping DOM element. On top of that they allow you to return multiple nodes from `render`.
+`Fragments`はPreact Xの新機能の１つです。これが追加されたことでPreactアプリケーションの構造を見直したいと思うかもしれません。
+これはラップするDOM要素無しで複数の並列した子要素をレンダリングすることができる特別なコンポーネントです。
+これが以下のように`render`関数が複数の並列したNodeをかえすことを可能にします。
 
-[Fragment docs →](/guide/v10/components#fragments)
+[Fragmentのドキュメント](/guide/v10/components#fragments)
 
 ```jsx
 function Foo() {
@@ -34,9 +37,11 @@ function Foo() {
 
 ## componentDidCatch
 
-We all wish errors wouldn't happen in our applications, but sometimes they do. With `componentDidCatch`, it's now possible to catch and handle any errors that occur within lifecycle methods like `render`, including exceptions deep in the component tree. This can be used to display user-friendly error messages, or write a log entry to an external service in case something goes wrong.
+アプリケーションでエラーが発生しないほうが望ましいですが、発生してしまうこともあります。
+`componentDidCatch`を使うと、`render`のようなライフサイクルメソッド内で発生した(コンポーネントツリーの深いところで発生したものも含む)エラーを補足して処理することができます。
+これはユーザフレンドリなエラーメッセージを表示したり、何か問題が起こった時に外部サービスにログを送信することに使えます。
 
-[Lifecycle docs →](/guide/v10/components#componentdidcatch)
+[componentDidCatchのドキュメント](/guide/v10/components#componentdidcatch)
 
 ```jsx
 class Catcher extends Component {
@@ -57,9 +62,11 @@ class Catcher extends Component {
 
 ## Hooks
 
-`Hooks` are a new way to make sharing logic easier between components. They represent an alternative to the existing class-based component API. In Preact they live inside an addon which can be imported via `preact/hooks`
+`Hooks`はコンポーネント間でロジックを共有することを容易にする新しい方法です。
+既存のクラスベースのコンポーネントに取って代わる新しい書き方です。
+Preactでは`Hooks`は`preact/hooks`からインポートして使用します。
 
-[Hooks Docs →](/guide/v10/hooks)
+[Hooksのドキュメント](/guide/v10/hooks)
 
 ```jsx
 function Counter() {
@@ -77,9 +84,12 @@ function Counter() {
 
 ## createContext
 
-The `createContext`-API is a true successor for `getChildContext()`. Whereas `getChildContext` is fine when you're absolutely sure to never change a value, it falls apart as soon as a component in-between the provider and consumer blocks an update via `shouldComponentUpdate` when it returns `false`. With the new context API this problem is now a thing of the past. It is a true pub/sub solution to deliver updates deep down the tree.
+`createContext`APIは`getChildContext()`の後継です。
+`getChildContext`はコンテキストの値が変更されない場合は問題ありませんが、変更される場合は、コンテキストの値を提供するコンポーネントと受け取るコンポーネントの間にあるコンポーネントが`shouldComponentUpdate`で`false`を返した場合、受け取るコンポーネントの更新処理が実行されない既知の問題があります。
+新しいコンテキストAPIはこの問題を解決しました。
+`createContext`はツリーの奥深くまで更新を伝播する本物のPub/Subソリューションです。
 
-[createContext Docs →](/guide/v10/context#createcontext)
+[createContextのドキュメント](/guide/v10/context#createcontext)
 
 ```jsx
 const Theme = createContext('light');
@@ -105,7 +115,8 @@ function App() {
 
 ## CSS Custom Properties
 
-Sometimes it's the little things that make a huge difference. With the recent advancements in CSS you can leverage [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) for styling:
+些細なことが大きな違いを作り出すことがあります。
+最近のCSSの進歩によって、[CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)を使用してスタイルを変更することが可能になりました。
 
 ```jsx
 function Foo(props) {
@@ -113,11 +124,13 @@ function Foo(props) {
 }
 ```
 
-## Compat lives in core
+## Compatがpreactパッケージへ移動
 
-Although we were always keen on adding new features and pushing Preact forward, the `preact-compat` package didn't receive as much love. Up until now it has lived in a separate repository making it harder to coordinate large changes spanning Preact and the compatibility layer. By moving compat into the same package as Preact itself, there's nothing extra to install in order to use libraries from the React ecosystem.
+Preactに新しい機能を加えることや改善することに注力してきましたが、`preact-compat`にはそれほど注力してきませんでした。
+今まで別のレポジトリにあったので両方に影響が出る大きな変更があった時、Preactとその互換レイヤーである`preact-compat`を調整することが困難でした。
+compatをPreactと同じパッケージに移動したことで、Reactのエコシステムを利用する際に追加のパッケージをインストールする必要がなくなりました。
 
-The compatibility layer is now called [preact/compat](/guide/v10/differences-to-react#features-exclusive-to-preactcompat), and has learned several new tricks such as `forwardRef`, `memo` and countless compatibility improvements.
+互換レイヤーは現在は[preact/compat](/guide/v10/differences-to-react#features-exclusive-to-preactcompat)にあります。また、`forwardRef`や`memo`等の新機能が追加され互換性が改善されました。
 
 ```js
 // Preact 8.x
@@ -127,8 +140,10 @@ import React from "preact-compat";
 import React from "preact/compat";
 ```
 
-## Many compatibility fixes
+## Reactとの互換性が大幅に向上
 
-These are too many to list, but we've grown bounds and leaps on the compatibility front with libraries from the React ecosystem. We specifically made sure to include several popular packages in our testing process to make sure that we can guarantee full support for them.
+Preact XではReactのエコシステムとの互換性が大幅に向上しました。
+人気のパッケージをテストプロセスに含めてそれらを完全にサポートできるようにしました。
 
-If you came across a library that didn't work well with Preact 8, you should give it another go with X. The chances are high that everything works as expected ;)
+Preact 8でうまく動作しないライブラリに出くわした場合は、Preact Xを試してみてください。
+きっと正常に動作するでしょう。
